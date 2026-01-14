@@ -1,12 +1,25 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [JsonPipe],
+  template: `
+    <div class="p-6">
+      <button mat-raised-button color="primary" (click)="ping()">Test /transactions</button>
+      <pre class="mt-4 text-sm">{{ last | json }}</pre>
+    </div>
+  `,
 })
 export class AppComponent {
-  title = 'personal_finance_frontend';
+  private http = inject(HttpClient);
+  last: unknown = null;
+
+  ping() {
+    this.http.get('/transactions').subscribe({
+      next: (r) => (this.last = r),
+      error: (e) => (this.last = e), // aqui você deve ver AppError tipado
+    });
+  }
 }
