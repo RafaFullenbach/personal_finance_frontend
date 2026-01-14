@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* card */
+.sidebar-card {
+  height: 100%;
+  border: 0.1rem solid rgba(0, 0, 0, 0.12);
+  border-radius: 1.4rem; /* github-ish */
+  overflow: hidden; /* borda arredondada de verdade */
+  background: white;
+}
+
+/* itens (mantém densidade boa) */
+mat-nav-list a.mat-mdc-list-item {
+  height: 4.4rem;
+  border-radius: 1rem;
+  margin: 0.4rem 0.8rem;
+}
+
+mat-nav-list a.mat-mdc-list-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.active-link {
+  background: rgba(25, 118, 210, 0.1);
+  border: 1px solid rgba(25, 118, 210, 0.18);
+}
+
+.shell-container {
+  height: 100vh;
+}
+
+.shell-sidenav {
+  width: 28rem;
+  min-width: 28rem;
+  max-width: 28rem;
+  background: transparent;
+}
+
+.sidebar-frame {
+  height: 100%;
+  padding: 1.5rem;
+  border-right: 0.1rem solid rgba(0, 0, 0, 0.08); /* divisor */
+  box-sizing: border-box;
+}

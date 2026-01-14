@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* altura consistente */
+mat-nav-list a.mat-mdc-list-item {
+  height: 4.4rem;
+  border-radius: 1rem;
+  margin: 0.4rem 0.8rem;
+}
+
+/* hover e active leves (funciona no tema claro) */
+mat-nav-list a.mat-mdc-list-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.active-link {
+  background: rgba(25, 118, 210, 0.1); /* azul material */
+  border: 0.2rem solid rgba(25, 118, 210, 0.18);
+}
+
+/* alinha ícone e texto no mesmo eixo */
+.nav-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* evita que o ícone “mude de largura” */
+.nav-row mat-icon {
+  width: 3rem;
+  height: 3rem;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+/* opcional: deixa o texto alinhado e consistente */
+.nav-label {
+  line-height: 2rem;
+}

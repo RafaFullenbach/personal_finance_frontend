@@ -1,25 +1,15 @@
-import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { JsonPipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [JsonPipe],
+  standalone: true,
+  imports: [RouterOutlet],
   template: `
-    <div class="p-6">
-      <button mat-raised-button color="primary" (click)="ping()">Test /transactions</button>
-      <pre class="mt-4 text-sm">{{ last | json }}</pre>
+    <div class="min-h-screen">
+      <router-outlet />
     </div>
   `,
 })
-export class AppComponent {
-  private http = inject(HttpClient);
-  last: unknown = null;
+export class AppComponent {}
 
-  ping() {
-    this.http.get('/transactions').subscribe({
-      next: (r) => (this.last = r),
-      error: (e) => (this.last = e), // aqui você deve ver AppError tipado
-    });
-  }
-}
