@@ -11,7 +11,17 @@ export const routes: Routes = [
 
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent
+          ),
+      },
+      {
+        path: 'transactions',
+        loadChildren: () =>
+          import('./features/transactions/transactions.routes').then(
+            (m) => m.TRANSACTIONS_ROUTES
+          ),
       },
     ],
   },
