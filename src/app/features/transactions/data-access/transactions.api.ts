@@ -35,10 +35,24 @@ export class TransactionsApi {
   getAll(params: {
     page: number;
     pageSize: number;
-  }): Observable<PagedResult<TransactionListItemDto>> {
-    const hp = new HttpParams()
+    year?: number;
+    month?: number;
+    type?: TransactionType;
+    status?: TransactionStatus;
+    sortBy?: string;
+    order?: 'asc' | 'desc';
+  }) {
+    let hp = new HttpParams()
       .set('page', params.page)
       .set('pageSize', params.pageSize);
+
+    if (params.year != null) hp = hp.set('year', params.year);
+    if (params.month != null) hp = hp.set('month', params.month);
+    if (params.type) hp = hp.set('type', params.type);
+    if (params.status) hp = hp.set('status', params.status);
+
+    hp = hp.set('sortBy', params.sortBy ?? 'transactionDate');
+    hp = hp.set('order', params.order ?? 'desc');
 
     return this.http.get<PagedResult<TransactionListItemDto>>('/transactions', {
       params: hp,

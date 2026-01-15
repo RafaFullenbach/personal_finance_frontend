@@ -1,5 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { TransactionsApi } from './transactions.api';
+import {
+  TransactionsApi,
+  TransactionStatus,
+  TransactionType,
+} from './transactions.api';
 import { mapTransactionListItem } from './transactions.mapper';
 import { TransactionListItem } from './transactions.model';
 import { AppError } from '../../../core/error/app-error';
@@ -8,6 +12,12 @@ import { AppError } from '../../../core/error/app-error';
 export class TransactionsStore {
   private api = inject(TransactionsApi);
 
+  readonly filterYear = signal<number | null>(null);
+  readonly filterMonth = signal<number | null>(null);
+  readonly filterType = signal<TransactionType | null>(null);
+  readonly filterStatus = signal<TransactionStatus | null>(null);
+  readonly sortBy = signal<string>('transactionDate');
+  readonly order = signal<'asc' | 'desc'>('desc');
   readonly items = signal<TransactionListItem[]>([]);
   readonly page = signal(1);
   readonly pageSize = signal(20);
@@ -32,7 +42,16 @@ export class TransactionsStore {
     this.error.set(null);
 
     this.api
-      .getAll({ page: this.page(), pageSize: this.pageSize() })
+      .getAll({
+        page: this.page(),
+        pageSize: this.pageSize(),
+        year: this.filterYear() ?? undefined,
+        month: this.filterMonth() ?? undefined,
+        type: this.filterType() ?? undefined,
+        status: this.filterStatus() ?? undefined,
+        sortBy: this.sortBy(),
+        order: this.order(),
+      })
       .subscribe({
         next: (res) => {
           this.items.set(res.items.map(mapTransactionListItem));
@@ -79,5 +98,35 @@ export class TransactionsStore {
         this.loading.set(false);
       },
     });
+  }
+
+  setFilters(f: {
+    year: number | null;
+    month: number | null;
+    type: TransactionType | null;
+    status: TransactionStatus | null;
+  }) {
+    this.filterYear.set(f.year);
+    this.filterMonth.set(f.month);
+    this.filterType.set(f.type);
+    this.filterStatus.set(f.status);
+    this.page.set(1);
+    this.load();
+  }
+
+  clearFilters() {
+    this.filterYear.set(null);
+    this.filterMonth.set(null);
+    this.filterType.set(null);
+    this.filterStatus.set(null);
+    this.page.set(1);
+    this.load();
+  }
+
+  setSort(sortBy: string, order: 'asc' | 'desc') {
+    this.sortBy.set(sortBy);
+    this.order.set(order);
+    this.page.set(1);
+    this.load();
   }
 }
