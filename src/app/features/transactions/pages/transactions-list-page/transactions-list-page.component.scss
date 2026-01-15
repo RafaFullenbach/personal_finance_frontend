@@ -1,0 +1,62 @@
+/* aumenta fonte do header e das linhas dessa tabela */
+.table-lg th.mat-mdc-header-cell {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.table-lg td.mat-mdc-cell {
+  font-size: 14px;
+}
+
+.table-lg .mat-mdc-row {
+  height: 52px; /* opcional: mais “respirado” */
+}
+
+:host ::ng-deep .mat-mdc-paginator .mat-mdc-select-value-text {
+  font-size: 1.3rem;
+}
+
+/* Label "Itens por página" */
+:host ::ng-deep .mat-mdc-paginator-page-size-label {
+  font-size: 1.3rem;
+}
+
+:host ::ng-deep .mat-mdc-table .mat-mdc-row:nth-child(even) {
+  background: rgba(190, 193, 197, 0.06);
+}
+
+:host ::ng-deep .mat-mdc-table .mat-mdc-row:nth-child(odd) {
+  background-color: white;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  font-size: 1.3rem;
+}
+
+:host ::ng-deep .mat-mdc-paginator-range-label {
+  font-size: 1.3rem;
+}
+
+/* ENABLED (cores) */
+:host ::ng-deep button.action-confirm .mat-icon {
+  color: var(--mat-sys-primary) !important;
+}
+
+:host ::ng-deep button.action-cancel .mat-icon {
+  color: var(--mat-sys-error) !important;
+}
+
+/* DISABLED (força cinza) — cobre todos os jeitos que o MDC marca disabled */
+:host ::ng-deep button.action-confirm[disabled] .mat-icon,
+:host ::ng-deep button.action-confirm.mat-mdc-icon-button-disabled .mat-icon,
+:host ::ng-deep button.action-confirm.mdc-icon-button--disabled .mat-icon,
+:host ::ng-deep button.action-confirm[aria-disabled="true"] .mat-icon {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+:host ::ng-deep button.action-cancel[disabled] .mat-icon,
+:host ::ng-deep button.action-cancel.mat-mdc-icon-button-disabled .mat-icon,
+:host ::ng-deep button.action-cancel.mdc-icon-button--disabled .mat-icon,
+:host ::ng-deep button.action-cancel[aria-disabled="true"] .mat-icon {
+  color: #cbd5e1 !important;
+}

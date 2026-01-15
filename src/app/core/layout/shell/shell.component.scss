@@ -1,6 +1,6 @@
 :host {
   display: block;
-  height: 100%;
+  height: 100dvh;
 }
 
 /* card */
@@ -29,7 +29,7 @@ mat-nav-list a.mat-mdc-list-item:hover {
 }
 
 .shell-container {
-  height: 100vh;
+  height: 100%;
 }
 
 .shell-sidenav {
@@ -44,4 +44,21 @@ mat-nav-list a.mat-mdc-list-item:hover {
   padding: 1.5rem;
   border-right: 0.1rem solid rgba(0, 0, 0, 0.08); /* divisor */
   box-sizing: border-box;
+}
+
+.shell-content {
+  height: 100%;
+  overflow: hidden;
+}
+
+.shell-main {
+  height: calc(100% - 64px); /* 64px = toolbar desktop */
+  overflow: hidden;
+}
+
+/* wrapper da página ocupa tudo e permite que a page use h-full */
+.shell-page {
+  height: 100%;
+  padding: 1.6rem 2.4rem;
+  overflow: hidden;
 }

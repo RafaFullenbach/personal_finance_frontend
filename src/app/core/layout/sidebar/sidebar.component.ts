@@ -25,6 +25,7 @@ export class SidebarComponent {
     { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
     { label: 'Lançamentos', icon: 'receipt_long', path: '/transactions' },
     { label: 'Contas', icon: 'account_balance', path: '/accounts' },
+    { label: 'Categorias', icon: 'category', path: '/categories' },
     { label: 'Orçamentos', icon: 'pie_chart', path: '/budgets' },
     { label: 'Relatórios', icon: 'analytics', path: '/reports' },
     { label: 'Recorrência', icon: 'repeat', path: '/recurring' },

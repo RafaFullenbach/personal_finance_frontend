@@ -15,7 +15,10 @@ function isApiProblemDetails(x: any): x is ApiProblemDetails {
 export function mapHttpError(err: unknown): AppError {
   // rxjs timeout
   if (err && typeof err === 'object' && (err as any).name === 'TimeoutError') {
-    return { kind: 'timeout', message: 'Tempo limite excedido. Tente novamente.' };
+    return {
+      kind: 'timeout',
+      message: 'Tempo limite excedido. Tente novamente.',
+    };
   }
 
   if (!(err instanceof HttpErrorResponse)) {
@@ -28,7 +31,7 @@ export function mapHttpError(err: unknown): AppError {
     const msg = body.detail ?? body.title ?? 'Erro';
 
     if (err.status === 400) {
-      return { kind: 'validation', message: msg, code: body.code ?? null };
+      return { kind: 'validation', message: msg, code: body.code ?? undefined };
     }
 
     if (err.status === 404) {
@@ -36,14 +39,15 @@ export function mapHttpError(err: unknown): AppError {
     }
 
     if (err.status === 409) {
-      return { kind: 'business', message: msg, code: body.code ?? null };
+      return { kind: 'business', message: msg, code: body.code ?? undefined };
     }
 
     return { kind: 'unknown', message: msg };
   }
 
   // fallback (quando não veio problem+json)
-  if (err.status === 404) return { kind: 'notFound', message: 'Recurso não encontrado.' };
+  if (err.status === 404)
+    return { kind: 'notFound', message: 'Recurso não encontrado.' };
 
   return { kind: 'unknown', message: 'Falha ao comunicar com o servidor.' };
 }

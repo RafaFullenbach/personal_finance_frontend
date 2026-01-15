@@ -1,1 +1,103 @@
-<p>transactions-list-page works!</p>
+<div class="h-full flex flex-col min-h-0">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">Lançamentos</h1>
+      <p class="text-xl text-slate-500">
+        Página {{ store.vm().page }} de {{ store.vm().totalPages }}
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      [routerLink]="['/transactions/new']"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+        <span class="text-2xl font-medium leading-none">Novo lançamento</span>
+      </span>
+    </button>
+  </div>
+
+  @if (store.vm().error; as err) {
+  <div class="mb-4 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+    {{ err.message }}
+    @if (err.code) {
+    <span class="ml-2 text-xs opacity-80">({{ err.code }})</span> }
+  </div>
+  } @if (store.vm().loading) {
+  <div class="mt-6">Carregando...</div>
+  } @else {
+  <div
+    class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 flex flex-col min-h-0"
+  >
+    <div class="flex-1 min-h-0 overflow-auto py-2 px-4">
+      <table mat-table [dataSource]="store.vm().items" class="w-full table-lg">
+        <ng-container matColumnDef="transactionDate">
+          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <td mat-cell *matCellDef="let t">
+            {{ t.transactionDate | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Descrição</th>
+          <td mat-cell *matCellDef="let t">{{ t.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let t">
+            {{ t.amount | number : "1.2-2" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let t">{{ t.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="w-[140px]">Ações</th>
+          <td mat-cell *matCellDef="let t">
+            <div class="flex items-center gap-2">
+              <button
+                mat-icon-button
+                class="action-confirm"
+                [disabled]="t.status !== 'Pending' || store.vm().loading"
+                (click)="store.confirm(t.id)"
+                matTooltip="Confirmar"
+              >
+                <mat-icon>check_circle</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                class="action-cancel"
+                [disabled]="t.status !== 'Pending' || store.vm().loading"
+                (click)="store.cancel(t.id)"
+                matTooltip="Cancelar"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      class="flex justify-end mt-4"
+      [length]="store.vm().totalItems"
+      [pageIndex]="store.vm().page - 1"
+      [pageSize]="store.vm().pageSize"
+      [pageSizeOptions]="[10, 20, 50]"
+      (page)="onPage($event)"
+    />
+  </div>
+  }
+</div>

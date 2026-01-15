@@ -14,24 +14,10 @@
       <span class="text-3xl">Personal Finance</span>
 
       <span class="flex-1"></span>
-
-      <!-- Ação rápida (depois ligamos em Transactions/Create) -->
-
-      <button
-        mat-flat-button
-        color="primary"
-        class="!rounded-lg !py-3 !px-6"
-        [routerLink]="['/transactions/new']"
-      >
-        <span class="flex items-center gap-3">
-          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
-          <span class="text-2xl font-medium leading-none">Novo lançamento</span>
-        </span>
-      </button>
     </mat-toolbar>
 
-    <main class="p-6">
-      <div class="max-w-6xl mx-auto">
+    <main class="shell-main">
+      <div class="shell-page">
         <router-outlet></router-outlet>
       </div>
     </main>
