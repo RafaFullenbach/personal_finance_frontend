@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+// Problema de conflito de bordas entre Tailwind e MDC
+@layer base {
+  *, ::before, ::after {
+    border-style: none;
+  }
+}
+
 html {
   @include mat.theme(
     (

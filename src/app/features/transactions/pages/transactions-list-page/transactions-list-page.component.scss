@@ -60,3 +60,10 @@
 :host ::ng-deep button.action-cancel[aria-disabled="true"] .mat-icon {
   color: #cbd5e1 !important;
 }
+
+mat-select,
+mat-label{
+  font-size: 1.4rem;
+}
+
+// mat-mdc-select ng-touched ng-dirty ng-valid

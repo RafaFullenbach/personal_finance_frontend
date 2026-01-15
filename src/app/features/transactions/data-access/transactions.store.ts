@@ -103,13 +103,13 @@ export class TransactionsStore {
   setFilters(f: {
     year: number | null;
     month: number | null;
-    type: TransactionType | null;
-    status: TransactionStatus | null;
+    type: string | null;
+    status: string | null;
   }) {
     this.filterYear.set(f.year);
     this.filterMonth.set(f.month);
-    this.filterType.set(f.type);
-    this.filterStatus.set(f.status);
+    this.filterType.set(f.type as any);
+    this.filterStatus.set(f.status as any);
     this.page.set(1);
     this.load();
   }
