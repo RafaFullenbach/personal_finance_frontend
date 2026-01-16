@@ -48,3 +48,8 @@ body {
 :root {
   font-size: 62.5%;
 }
+
+// Ajuste de padding para não cortar itens ao aumentar a fonte do select
+.mat-mdc-select-panel .mdc-list-item__primary-text{
+  padding: 2rem 0 !important;
+}

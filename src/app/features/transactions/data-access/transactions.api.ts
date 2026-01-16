@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export type Guid = string;
-
 export type TransactionType = 'Debit' | 'Credit';
 export type TransactionStatus = 'Pending' | 'Confirmed' | 'Cancelled';
 
@@ -26,6 +25,18 @@ export interface PagedResult<T> {
   pageSize: number;
   totalItems: number;
   totalPages: number;
+}
+
+export interface CreateTransactionRequest {
+  amount: number;
+  type: TransactionType;
+  transactionDate: string; // ISO
+  competenceYear: number;
+  competenceMonth: number;
+  description: string;
+  accountId: Guid;
+  categoryId?: Guid | null;
+  recurringTemplateId?: Guid | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -65,5 +76,9 @@ export class TransactionsApi {
 
   cancel(id: Guid) {
     return this.http.post<void>(`/transactions/${id}/cancel`, {});
+  }
+
+  create(body: CreateTransactionRequest) {
+    return this.http.post<void>('/transactions', body);
   }
 }

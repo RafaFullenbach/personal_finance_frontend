@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import {
+  CreateTransactionRequest,
   TransactionsApi,
   TransactionStatus,
   TransactionType,
@@ -128,5 +129,21 @@ export class TransactionsStore {
     this.order.set(order);
     this.page.set(1);
     this.load();
+  }
+
+ create(req: CreateTransactionRequest, onSuccess: () => void) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.create(req).subscribe({
+      next: () => {
+        this.loading.set(false);
+        onSuccess();
+      },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
   }
 }

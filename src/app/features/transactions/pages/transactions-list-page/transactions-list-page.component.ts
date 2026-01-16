@@ -54,8 +54,8 @@ export class TransactionsListPageComponent implements OnInit {
   ];
 
   types = [
-    { value: 'Debit', label: 'Débito' },
-    { value: 'Credit', label: 'Crédito' },
+    { value: 'Debit', label: 'Despesa' },
+    { value: 'Credit', label: 'Receita' },
   ];
 
   statuses = [
