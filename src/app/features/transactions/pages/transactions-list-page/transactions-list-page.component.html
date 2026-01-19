@@ -148,7 +148,7 @@
                   mat-icon-button
                   class="action-confirm"
                   [disabled]="t.status !== 'Pending' || store.vm().loading"
-                  (click)="store.confirm(t.id)"
+                  (click)="confirm(t.id)"
                   matTooltip="Confirmar"
                 >
                   <mat-icon>check_circle</mat-icon>
@@ -168,7 +168,7 @@
                   mat-icon-button
                   class="action-cancel"
                   [disabled]="t.status !== 'Pending' || store.vm().loading"
-                  (click)="store.cancel(t.id)"
+                  (click)="cancel(t.id)"
                   matTooltip="Cancelar"
                 >
                   <mat-icon>cancel</mat-icon>

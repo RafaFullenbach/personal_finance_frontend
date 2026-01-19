@@ -13,6 +13,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ToastService } from '../../../../core/ui/toast.service';
 
 @Component({
   selector: 'app-transactions-list-page',
@@ -37,7 +38,9 @@ export class TransactionsListPageComponent implements OnInit {
   store = inject(TransactionsStore);
 
   private fb = inject(FormBuilder);
-
+  
+  private toast = inject(ToastService);
+  
   years = Array.from({ length: 8 }, (_, i) => new Date().getFullYear() - 5 + i);
 
   months = [
@@ -104,5 +107,15 @@ export class TransactionsListPageComponent implements OnInit {
   clearFilters() {
     this.filtersForm.reset();
     this.store.clearFilters();
+  }
+
+  confirm(id: string) {
+    this.toast.success('Lançamento confirmado com sucesso.');
+    this.store.confirm(id);
+  }
+
+  cancel(id: string) {
+    this.toast.success('Lançamento cancelado com sucesso.');
+    this.store.cancel(id);
   }
 }
