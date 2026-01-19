@@ -4,15 +4,22 @@ export const TRANSACTIONS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import(
-        './pages/transactions-list-page/transactions-list-page.component'
-      ).then((m) => m.TransactionsListPageComponent),
+      import('./pages/transactions-list-page/transactions-list-page.component').then(
+        (m) => m.TransactionsListPageComponent,
+      ),
   },
   {
     path: 'new',
     loadComponent: () =>
-      import(
-        './pages/transactions-create-page/transactions-create-page.component'
-      ).then((m) => m.TransactionsCreatePageComponent),
+      import('./pages/transactions-create-page/transactions-create-page.component').then(
+        (m) => m.TransactionsCreatePageComponent,
+      ),
+  },
+  {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./pages/transactions-create-page/transactions-create-page.component').then(
+        (m) => m.TransactionsCreatePageComponent,
+      ),
   },
 ];

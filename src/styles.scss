@@ -6,7 +6,9 @@
 
 // Problema de conflito de bordas entre Tailwind e MDC
 @layer base {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     border-style: none;
   }
 }
@@ -47,9 +49,31 @@ body {
 
 :root {
   font-size: 62.5%;
+
+  @include mat.tooltip-overrides(
+    (
+      supporting-text-size: 1.1rem,
+    )
+  );
 }
 
 // Ajuste de padding para não cortar itens ao aumentar a fonte do select
-.mat-mdc-select-panel .mdc-list-item__primary-text{
+.mat-mdc-select-panel .mdc-list-item__primary-text {
   padding: 2rem 0 !important;
+}
+
+.pf-snackbar--success {
+  --mdc-snackbar-container-color: #198b56; /* fundo */
+  --mdc-snackbar-supporting-text-color: #ffffff; /* texto */
+  --mat-snack-bar-button-color: #ffffff; /* botão */
+}
+
+.pf-snackbar--error {
+  --mdc-snackbar-container-color: #df1e2f;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+}
+
+.mat-mdc-snack-bar-container.pf-snackbar .mdc-snackbar__label {
+  font-size: 1.32rem !important;
 }

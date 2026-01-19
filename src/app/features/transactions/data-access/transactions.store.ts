@@ -8,6 +8,10 @@ import {
 import { mapTransactionListItem } from './transactions.mapper';
 import { TransactionListItem } from './transactions.model';
 import { AppError } from '../../../core/error/app-error';
+import {
+  TransactionListItemDto,
+  UpdateTransactionRequest,
+} from './transactions.api';
 
 @Injectable()
 export class TransactionsStore {
@@ -24,6 +28,8 @@ export class TransactionsStore {
   readonly pageSize = signal(20);
   readonly totalItems = signal(0);
   readonly totalPages = signal(0);
+  readonly current = signal<TransactionListItemDto | null>(null);
+  readonly isEditMode = signal(false);
 
   readonly loading = signal(false);
   readonly error = signal<AppError | null>(null);
@@ -34,6 +40,7 @@ export class TransactionsStore {
     pageSize: this.pageSize(),
     totalItems: this.totalItems(),
     totalPages: this.totalPages(),
+    current: this.current(),
     loading: this.loading(),
     error: this.error(),
   }));
@@ -131,11 +138,43 @@ export class TransactionsStore {
     this.load();
   }
 
- create(req: CreateTransactionRequest, onSuccess: () => void) {
+  create(req: CreateTransactionRequest, onSuccess: () => void) {
     this.loading.set(true);
     this.error.set(null);
 
     this.api.create(req).subscribe({
+      next: () => {
+        this.loading.set(false);
+        onSuccess();
+      },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  loadById(id: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.getById(id).subscribe({
+      next: (t) => {
+        this.current.set(t);
+        this.loading.set(false);
+      },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  update(id: string, req: UpdateTransactionRequest, onSuccess: () => void) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.update(id, req).subscribe({
       next: () => {
         this.loading.set(false);
         onSuccess();

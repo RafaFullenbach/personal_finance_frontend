@@ -16,6 +16,7 @@ export interface TransactionListItemDto {
   competenceMonth: number;
   description: string;
   accountId: Guid;
+  categoryId?: Guid | null;
   recurringTemplateId?: Guid | null;
 }
 
@@ -37,6 +38,17 @@ export interface CreateTransactionRequest {
   accountId: Guid;
   categoryId?: Guid | null;
   recurringTemplateId?: Guid | null;
+}
+
+export interface UpdateTransactionRequest {
+  amount: number;
+  type: TransactionType;
+  transactionDate: string;
+  competenceYear: number;
+  competenceMonth: number;
+  description: string;
+  accountId: string;
+  categoryId?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -80,5 +92,13 @@ export class TransactionsApi {
 
   create(body: CreateTransactionRequest) {
     return this.http.post<void>('/transactions', body);
+  }
+
+  getById(id: string) {
+    return this.http.get<TransactionListItemDto>(`/transactions/${id}`);
+  }
+
+  update(id: string, body: UpdateTransactionRequest) {
+    return this.http.put<void>(`/transactions/${id}`, body);
   }
 }

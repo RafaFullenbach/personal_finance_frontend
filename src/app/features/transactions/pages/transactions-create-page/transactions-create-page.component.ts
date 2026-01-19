@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, effect, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,8 @@ import { TransactionType } from '../../data-access/transactions.api';
 import { TransactionsStore } from '../../data-access/transactions.store';
 import { AccountsStore } from '../../../accounts/data-access/accounts.store';
 import { CategoriesStore } from '../../../categories/data-access/categories.store';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from '../../../../core/ui/toast.service';
 
 @Component({
   selector: 'app-transactions-create-page',
@@ -43,6 +45,12 @@ export class TransactionsCreatePageComponent {
   store = inject(TransactionsStore);
   accountsStore = inject(AccountsStore);
   categoriesStore = inject(CategoriesStore);
+
+  private route = inject(ActivatedRoute);
+  id = this.route.snapshot.paramMap.get('id');
+  isEditMode = !!this.id;
+
+  private toast = inject(ToastService);
 
   types: { value: TransactionType; label: string }[] = [
     { value: 'Debit', label: 'Despesa' },
@@ -84,14 +92,42 @@ export class TransactionsCreatePageComponent {
             competenceYear: d.getFullYear(),
             competenceMonth: d.getMonth() + 1,
           },
-          { emitEvent: false }
+          { emitEvent: false },
         );
       });
+
+    effect(() => {
+      const t = this.store.vm().current;
+      if (!t) return;
+
+      if (t.status !== 'Pending') {
+        this.form.disable();
+        return;
+      }
+
+      this.form.patchValue(
+        {
+          description: t.description,
+          amount: t.amount,
+          type: t.type,
+          transactionDate: new Date(t.transactionDate),
+          competenceYear: t.competenceYear,
+          competenceMonth: t.competenceMonth,
+          accountId: t.accountId,
+          categoryId: t.categoryId ?? null,
+        },
+        { emitEvent: false },
+      );
+    });
   }
 
   ngOnInit(): void {
     this.accountsStore.load();
     this.categoriesStore.load();
+
+    if (!this.isEditMode) return;
+
+    this.store.loadById(this.id!);
   }
 
   submit() {
@@ -102,17 +138,27 @@ export class TransactionsCreatePageComponent {
 
     const v = this.form.getRawValue();
 
-    this.store.create(
-      {
-        description: v.description!,
-        amount: v.amount!,
-        type: v.type!,
-        transactionDate: (v.transactionDate as Date).toISOString(),
-        competenceYear: v.competenceYear!,
-        competenceMonth: v.competenceMonth!,
-        accountId: v.accountId!,
-      },
-      () => this.router.navigate(['/transactions'])
-    );
+    const req = {
+      description: v.description!,
+      amount: v.amount!,
+      type: v.type!,
+      transactionDate: (v.transactionDate as Date).toISOString(),
+      competenceYear: v.competenceYear!,
+      competenceMonth: v.competenceMonth!,
+      accountId: v.accountId!,
+      categoryId: v.categoryId ?? null,
+    };
+
+    if (this.isEditMode) {
+      this.store.update(this.id!, req, () => {
+        this.toast.success('Lançamento atualizado com sucesso.');
+        this.router.navigate(['/transactions']);
+      });
+    } else {
+      this.store.create(req, () => {
+        this.toast.success('Lançamento criado com sucesso.');
+        this.router.navigate(['/transactions']);
+      });
+    }
   }
 }

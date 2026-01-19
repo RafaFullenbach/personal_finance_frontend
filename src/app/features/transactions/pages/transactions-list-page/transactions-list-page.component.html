@@ -5,7 +5,9 @@
       <!-- <p class="text-xl text-slate-500">
         Página {{ store.vm().page }} de {{ store.vm().totalPages }}
       </p> -->
-       <p class="text-slate-500 mb-1 text-2xl">Filtre por ano, mês, tipo e status para encontrar seus lançamentos.</p>
+      <p class="text-slate-500 mb-1 text-2xl">
+        Filtre por ano, mês, tipo e status para encontrar seus lançamentos.
+      </p>
     </div>
 
     <button
@@ -27,7 +29,7 @@
       <mat-select formControlName="year">
         <mat-option [value]="null">Todos</mat-option>
         @for (y of years; track y) {
-        <mat-option [value]="y">{{ y }}</mat-option>
+          <mat-option [value]="y">{{ y }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -37,7 +39,7 @@
       <mat-select formControlName="month">
         <mat-option [value]="null">Todos</mat-option>
         @for (m of months; track m.value) {
-        <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          <mat-option [value]="m.value">{{ m.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -47,7 +49,7 @@
       <mat-select formControlName="type">
         <mat-option [value]="null">Todos</mat-option>
         @for (t of types; track t.value) {
-        <mat-option [value]="t.value">{{ t.label }}</mat-option>
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -57,7 +59,7 @@
       <mat-select formControlName="status">
         <mat-option [value]="null">Todos</mat-option>
         @for (s of statuses; track s.value) {
-        <mat-option [value]="s.value">{{ s.label }}</mat-option>
+          <mat-option [value]="s.value">{{ s.label }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -87,99 +89,107 @@
     </button>
   </form>
 
-  @if (store.vm().error; as err) {
-  <div class="mb-4 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
-    {{ err.message }}
-    @if (err.code) {
-    <span class="ml-2 text-xs opacity-80">({{ err.code }})</span> }
-  </div>
-  } @if (store.vm().loading) {
-  <div class="mt-6">Carregando...</div>
+  @if (store.vm().loading) {
+    <div class="mt-6">Carregando...</div>
   } @else {
-  <div
-    class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 flex flex-col min-h-0"
-  >
-    <div class="flex-1 min-h-0 overflow-auto py-2 px-4">
-      <table mat-table [dataSource]="store.vm().items" class="w-full table-lg">
-        <ng-container matColumnDef="transactionDate">
-          <th mat-header-cell *matHeaderCellDef>Data</th>
-          <td mat-cell *matCellDef="let t">
-            {{ t.transactionDate | date : "dd/MM/yyyy" }}
-          </td>
-        </ng-container>
+    <div
+      class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 flex flex-col min-h-0"
+    >
+      <div class="flex-1 min-h-0 overflow-auto py-2 px-4">
+        <table
+          mat-table
+          [dataSource]="store.vm().items"
+          class="w-full table-lg"
+        >
+          <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef>Data</th>
+            <td mat-cell *matCellDef="let t">
+              {{ t.transactionDate | date: "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>Descrição</th>
-          <td mat-cell *matCellDef="let t">{{ t.description }}</td>
-        </ng-container>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Descrição</th>
+            <td mat-cell *matCellDef="let t">{{ t.description }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Valor</th>
-          <td mat-cell *matCellDef="let t">
-            {{ t.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <td mat-cell *matCellDef="let t">
+              {{ t.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Tipo</th>
-          <td mat-cell *matCellDef="let t">
-            {{ t.type === "Debit" ? "Despesa" : "Receita" }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let t">
+              {{ t.type === "Debit" ? "Despesa" : "Receita" }}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let t">
-            {{
-              t.status === "Confirmed"
-                ? "Confirmado"
-                : t.status === "Cancelled"
-                ? "Cancelado"
-                : "Pendente"
-            }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let t">
+              {{
+                t.status === "Confirmed"
+                  ? "Confirmado"
+                  : t.status === "Cancelled"
+                    ? "Cancelado"
+                    : "Pendente"
+              }}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="w-[140px]">Ações</th>
-          <td mat-cell *matCellDef="let t">
-            <div class="flex items-center gap-2">
-              <button
-                mat-icon-button
-                class="action-confirm"
-                [disabled]="t.status !== 'Pending' || store.vm().loading"
-                (click)="store.confirm(t.id)"
-                matTooltip="Confirmar"
-              >
-                <mat-icon>check_circle</mat-icon>
-              </button>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="w-[140px]">Ações</th>
+            <td mat-cell *matCellDef="let t">
+              <div class="flex items-center gap-2">
+                <button
+                  mat-icon-button
+                  class="action-confirm"
+                  [disabled]="t.status !== 'Pending' || store.vm().loading"
+                  (click)="store.confirm(t.id)"
+                  matTooltip="Confirmar"
+                >
+                  <mat-icon>check_circle</mat-icon>
+                </button>
 
-              <button
-                mat-icon-button
-                class="action-cancel"
-                [disabled]="t.status !== 'Pending' || store.vm().loading"
-                (click)="store.cancel(t.id)"
-                matTooltip="Cancelar"
-              >
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
+                <button
+                  mat-icon-button
+                  [routerLink]="['/transactions', t.id, 'edit']"
+                  [disabled]="t.status !== 'Pending' || store.vm().loading"
+                  matTooltip="Editar"
+                  matTooltipClass="tooltip-grande"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
+                <button
+                  mat-icon-button
+                  class="action-cancel"
+                  [disabled]="t.status !== 'Pending' || store.vm().loading"
+                  (click)="store.cancel(t.id)"
+                  matTooltip="Cancelar"
+                >
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        class="flex justify-end mt-4"
+        [length]="store.vm().totalItems"
+        [pageIndex]="store.vm().page - 1"
+        [pageSize]="store.vm().pageSize"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPage($event)"
+      />
     </div>
-
-    <mat-paginator
-      class="flex justify-end mt-4"
-      [length]="store.vm().totalItems"
-      [pageIndex]="store.vm().page - 1"
-      [pageSize]="store.vm().pageSize"
-      [pageSizeOptions]="[10, 20, 50]"
-      (page)="onPage($event)"
-    />
-  </div>
   }
 </div>

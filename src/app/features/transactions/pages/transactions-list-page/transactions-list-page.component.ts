@@ -12,6 +12,7 @@ import { TransactionsStore } from '../../data-access/transactions.store';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-transactions-list-page',
@@ -26,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatTooltipModule,
   ],
   providers: [TransactionsStore],
   templateUrl: './transactions-list-page.component.html',

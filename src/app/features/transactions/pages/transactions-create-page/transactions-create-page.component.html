@@ -1,9 +1,17 @@
 <div class="h-full flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-4xl font-semibold mb-1">Novo lançamento</h1>
-      <p class="text-slate-500 text-2xl">
+      <h1 *ngIf="!isEditMode" class="text-4xl font-semibold mb-1">
+        Novo lançamento
+      </h1>
+      <h1 *ngIf="isEditMode" class="text-4xl font-semibold mb-1">
+        Editar lançamento
+      </h1>
+      <p *ngIf="!isEditMode" class="text-slate-500 text-2xl">
         Crie um lançamento de despesa ou receita.
+      </p>
+      <p *ngIf="isEditMode" class="text-slate-500 text-2xl">
+        Edite um lançamento de despesa ou receita.
       </p>
     </div>
 
@@ -21,11 +29,12 @@
   </div>
 
   @if (store.error(); as err) {
-  <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
-    {{ err.message }}
-    @if (err.code) {
-    <span class="ml-2 text-xs opacity-80">({{ err.code }})</span> }
-  </div>
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
   }
 
   <form
@@ -36,9 +45,10 @@
       <mat-form-field appearance="outline" class="md:col-span-2">
         <mat-label>Descrição</mat-label>
         <input matInput formControlName="description" />
-        @if (form.controls.description.touched &&
-        form.controls.description.invalid) {
-        <mat-error>Descrição é obrigatória</mat-error>
+        @if (
+          form.controls.description.touched && form.controls.description.invalid
+        ) {
+          <mat-error>Descrição é obrigatória</mat-error>
         }
       </mat-form-field>
 
@@ -46,7 +56,7 @@
         <mat-label>Valor</mat-label>
         <input matInput type="number" formControlName="amount" />
         @if (form.controls.amount.touched && form.controls.amount.invalid) {
-        <mat-error>Informe um valor maior que 0</mat-error>
+          <mat-error>Informe um valor maior que 0</mat-error>
         }
       </mat-form-field>
 
@@ -54,11 +64,11 @@
         <mat-label>Tipo</mat-label>
         <mat-select formControlName="type">
           @for (t of types; track t.value) {
-          <mat-option [value]="t.value">{{ t.label }}</mat-option>
+            <mat-option [value]="t.value">{{ t.label }}</mat-option>
           }
         </mat-select>
         @if (form.controls.type.touched && form.controls.type.invalid) {
-        <mat-error>Selecione o tipo</mat-error>
+          <mat-error>Selecione o tipo</mat-error>
         }
       </mat-form-field>
 
@@ -94,13 +104,14 @@
 
           <mat-select formControlName="accountId">
             @for (a of accountsStore.items(); track a.id) {
-            <mat-option [value]="a.id">{{ a.name }}</mat-option>
+              <mat-option [value]="a.id">{{ a.name }}</mat-option>
             }
           </mat-select>
 
-          @if (form.controls.accountId.touched &&
-          form.controls.accountId.invalid) {
-          <mat-error>Conta é obrigatória</mat-error>
+          @if (
+            form.controls.accountId.touched && form.controls.accountId.invalid
+          ) {
+            <mat-error>Conta é obrigatória</mat-error>
           }
         </mat-form-field>
 
@@ -112,7 +123,7 @@
 
           <mat-select formControlName="categoryId">
             @for (a of categoriesStore.items(); track a.id) {
-            <mat-option [value]="a.id">{{ a.name }}</mat-option>
+              <mat-option [value]="a.id">{{ a.name }}</mat-option>
             }
           </mat-select>
         </mat-form-field>

@@ -1,4 +1,8 @@
-import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  LOCALE_ID,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +14,8 @@ import { baseUrlInterceptor } from './core/http/http-base-url.interceptor';
 import { timeoutInterceptor } from './core/http/http-timeout.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { toastInterceptor } from './core/http/toast.interceptor';
 
 registerLocaleData(localePt);
 
@@ -24,7 +30,9 @@ export const appConfig: ApplicationConfig = {
         baseUrlInterceptor,
         timeoutInterceptor,
         errorInterceptor,
-      ])
+        toastInterceptor,
+      ]),
     ),
+    provideAnimations(),
   ],
 };
