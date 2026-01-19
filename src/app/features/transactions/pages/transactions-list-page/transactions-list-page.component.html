@@ -89,6 +89,15 @@
     </button>
   </form>
 
+    @if (store.vm().error; as err) {
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
   @if (store.vm().loading) {
     <div class="mt-6">Carregando...</div>
   } @else {
@@ -151,7 +160,7 @@
                   (click)="confirm(t.id)"
                   matTooltip="Confirmar"
                 >
-                  <mat-icon>check_circle</mat-icon>
+                  <mat-icon>check</mat-icon>
                 </button>
 
                 <button
@@ -159,7 +168,6 @@
                   [routerLink]="['/transactions', t.id, 'edit']"
                   [disabled]="t.status !== 'Pending' || store.vm().loading"
                   matTooltip="Editar"
-                  matTooltipClass="tooltip-grande"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -171,7 +179,7 @@
                   (click)="cancel(t.id)"
                   matTooltip="Cancelar"
                 >
-                  <mat-icon>cancel</mat-icon>
+                  <mat-icon>block</mat-icon>
                 </button>
               </div>
             </td>

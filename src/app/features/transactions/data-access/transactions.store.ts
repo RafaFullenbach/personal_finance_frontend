@@ -6,7 +6,7 @@ import {
   TransactionType,
 } from './transactions.api';
 import { mapTransactionListItem } from './transactions.mapper';
-import { TransactionListItem } from './transactions.model';
+import { TransactionsModel } from './transactions.model';
 import { AppError } from '../../../core/error/app-error';
 import {
   TransactionListItemDto,
@@ -23,7 +23,7 @@ export class TransactionsStore {
   readonly filterStatus = signal<TransactionStatus | null>(null);
   readonly sortBy = signal<string>('transactionDate');
   readonly order = signal<'asc' | 'desc'>('desc');
-  readonly items = signal<TransactionListItem[]>([]);
+  readonly items = signal<TransactionsModel[]>([]);
   readonly page = signal(1);
   readonly pageSize = signal(20);
   readonly totalItems = signal(0);

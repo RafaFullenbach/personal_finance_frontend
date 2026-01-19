@@ -13,14 +13,21 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then(
-            (m) => m.DashboardComponent
+            (m) => m.DashboardComponent,
           ),
       },
       {
         path: 'transactions',
         loadChildren: () =>
           import('./features/transactions/transactions.routes').then(
-            (m) => m.TRANSACTIONS_ROUTES
+            (m) => m.TRANSACTIONS_ROUTES,
+          ),
+      },
+      {
+        path: 'accounts',
+        loadChildren: () =>
+          import('./features/accounts/accounts.routes').then(
+            (m) => m.ACCOUNTS_ROUTES,
           ),
       },
     ],

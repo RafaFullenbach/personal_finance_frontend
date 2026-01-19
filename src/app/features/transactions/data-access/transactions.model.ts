@@ -1,6 +1,6 @@
 import { Guid, TransactionStatus, TransactionType } from './transactions.api';
 
-export interface TransactionListItem {
+export interface TransactionsModel {
   id: Guid;
   amount: number;
   type: TransactionType;

@@ -1,0 +1,99 @@
+<div class="h-full flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-semibold">Contas</h1>
+      <p class="text-slate-500 text-2xl">
+        Gerencie suas contas (bancos, carteiras, investimentos).
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      disabled
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+        <span class="text-2xl font-medium leading-none">Nova conta</span>
+      </span>
+    </button>
+  </div>
+
+  @if (store.vm().error; as err) {
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  @if (store.vm().loading) {
+    <div class="mt-6">Carregando...</div>
+  } @else {
+    <div
+      class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 min-h-0"
+    >
+      <div class="overflow-auto">
+        <table
+          mat-table
+          [dataSource]="store.vm().items"
+          class="w-full table-lg"
+        >
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Conta</th>
+            <td mat-cell *matCellDef="let a">{{ a.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let a">
+              {{
+                a.type === "Bank"
+                  ? "Banco"
+                  : a.type === "Cash"
+                    ? "Dinheiro"
+                    : a.type === "CreditCard"
+                      ? "Cartão de Crédito"
+                      : "Investimento"
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let a">
+              {{ a.isActive ? "Ativa" : "Inativa" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let a">
+              <button
+                mat-icon-button
+                class="action-confirm"
+                [disabled]="a.isActive"
+                matTooltip="Ativar conta"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="action-cancel"
+                [disabled]="!a.isActive"
+                matTooltip="Desativar conta"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+  }
+</div>
