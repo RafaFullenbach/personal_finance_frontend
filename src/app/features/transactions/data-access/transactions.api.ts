@@ -16,6 +16,7 @@ export interface TransactionListItemDto {
   competenceMonth: number;
   description: string;
   accountId: Guid;
+  accountName: string;
   categoryId?: Guid | null;
   recurringTemplateId?: Guid | null;
 }

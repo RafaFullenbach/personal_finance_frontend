@@ -79,6 +79,7 @@ export class TransactionsListPageComponent implements OnInit {
   displayedColumns: string[] = [
     'transactionDate',
     'description',
+    'account',
     'amount',
     'type',
     'status',

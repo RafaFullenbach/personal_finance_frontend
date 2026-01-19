@@ -10,5 +10,6 @@ export interface TransactionsModel {
   competenceMonth: number;
   description: string;
   accountId: Guid;
+  accountName: string;
   recurringTemplateId?: Guid | null;
 }

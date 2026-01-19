@@ -74,16 +74,18 @@
               <button
                 mat-icon-button
                 class="action-confirm"
-                [disabled]="a.isActive"
+                [disabled]="a.isActive || store.vm().loading"
                 matTooltip="Ativar conta"
+                (click)="activate(a.id)"
               >
                 <mat-icon>check</mat-icon>
               </button>
               <button
                 mat-icon-button
                 class="action-cancel"
-                [disabled]="!a.isActive"
+                [disabled]="!a.isActive || store.vm().loading"
                 matTooltip="Desativar conta"
+                (click)="deactivate(a.id)"
               >
                 <mat-icon>close</mat-icon>
               </button>
