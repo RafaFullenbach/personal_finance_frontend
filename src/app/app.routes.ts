@@ -30,6 +30,13 @@ export const routes: Routes = [
             (m) => m.ACCOUNTS_ROUTES,
           ),
       },
+      {
+        path: 'categories',
+        loadChildren: () =>
+          import('./features/categories/categories.routes').then(
+            (m) => m.CATEGORIES_ROUTES,
+          ),
+      },
     ],
   },
 ];
