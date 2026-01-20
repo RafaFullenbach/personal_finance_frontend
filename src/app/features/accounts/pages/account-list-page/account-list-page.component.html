@@ -68,26 +68,25 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <ng-container matColumnDef="activate">
+            <th mat-header-cell *matHeaderCellDef>Ativar/Desativar</th>
+            <td mat-cell *matCellDef="let a">
+              <mat-slide-toggle
+                [checked]="a.isActive"
+                (change)="a.isActive ? deactivate(a.id) : activate(a.id)"
+              ></mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Editar</th>
             <td mat-cell *matCellDef="let a">
               <button
                 mat-icon-button
-                class="action-confirm"
-                [disabled]="a.isActive || store.vm().loading"
-                matTooltip="Ativar conta"
-                (click)="activate(a.id)"
+                [routerLink]="['/accounts', a.id, 'edit']"
+                matTooltip="Editar"
               >
-                <mat-icon>check</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                class="action-cancel"
-                [disabled]="!a.isActive || store.vm().loading"
-                matTooltip="Desativar conta"
-                (click)="deactivate(a.id)"
-              >
-                <mat-icon>close</mat-icon>
+                <mat-icon>edit</mat-icon>
               </button>
             </td>
           </ng-container>

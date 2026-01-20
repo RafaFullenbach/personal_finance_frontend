@@ -1,13 +1,29 @@
 <div class="h-full flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-4xl font-semibold">Nova conta</h1>
+      <h1 class="text-4xl font-semibold">
+        {{ accountId ? "Editar conta" : "Nova conta" }}
+      </h1>
       <p class="text-slate-500 text-2xl">
-        Crie uma conta para organizar seus lançamentos.
+        {{
+          accountId
+            ? "Edite os dados da conta."
+            : "Crie uma conta para organizar seus lançamentos."
+        }}
       </p>
     </div>
 
-    <a mat-button [routerLink]="['/accounts']">Voltar</a>
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      [routerLink]="['/accounts']"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">arrow_back</mat-icon>
+        <span class="text-2xl font-medium leading-none">Voltar</span>
+      </span>
+    </button>
   </div>
 
   @if (store.error(); as err) {

@@ -7,6 +7,7 @@ import { AccountsStore } from '../../data-access/accounts.store';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastService } from '../../../../core/ui/toast.service';
 import { RouterLink } from '@angular/router';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-account-list-page',
@@ -18,6 +19,7 @@ import { RouterLink } from '@angular/router';
     MatIconModule,
     MatTooltipModule,
     RouterLink,
+    MatSlideToggleModule,
   ],
   providers: [AccountsStore],
   templateUrl: './account-list-page.component.html',
@@ -28,7 +30,7 @@ export class AccountListPageComponent implements OnInit {
 
   private toast = inject(ToastService);
 
-  displayedColumns = ['name', 'type', 'status', 'actions'];
+  displayedColumns = ['name', 'type', 'status', 'activate', 'edit'];
 
   ngOnInit(): void {
     this.store.load();

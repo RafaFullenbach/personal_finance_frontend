@@ -11,8 +11,15 @@ export const ACCOUNTS_ROUTES: Routes = [
   {
     path: 'new',
     loadComponent: () =>
-      import('./pages/account-create-page/account-create-page.component').then(
-        (m) => m.AccountCreatePageComponent,
+      import('./pages/accounts-upsert-page/accounts-upsert-page.component').then(
+        (m) => m.AccountsUpsertPageComponent,
+      ),
+  },
+  {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./pages/accounts-upsert-page/accounts-upsert-page.component').then(
+        (m) => m.AccountsUpsertPageComponent,
       ),
   },
 ];

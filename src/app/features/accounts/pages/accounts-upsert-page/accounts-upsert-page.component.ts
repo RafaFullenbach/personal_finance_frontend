@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit, computed, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -10,11 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { AccountType } from '../../data-access/accounts.api';
-import { AccountsCreateStore } from '../../data-access/accounts-create.store';
+import { AccountsUpsertStore } from '../../data-access/accounts-upsert.store';
 import { ToastService } from '../../../../core/ui/toast.service';
 
 @Component({
-  selector: 'app-account-create-page',
+  selector: 'app-accounts-upsert-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,19 +26,20 @@ import { ToastService } from '../../../../core/ui/toast.service';
     MatButtonModule,
     MatIconModule,
   ],
-  providers: [AccountsCreateStore],
-  templateUrl: './account-create-page.component.html',
-  styleUrl: './account-create-page.component.scss',
+  providers: [AccountsUpsertStore],
+  templateUrl: './accounts-upsert-page.component.html',
+  styleUrl: './accounts-upsert-page.component.scss',
 })
-export class AccountCreatePageComponent {
+export class AccountsUpsertPageComponent implements OnInit {
   private fb = inject(FormBuilder);
-  
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
-
-  store = inject(AccountsCreateStore);
+  store = inject(AccountsUpsertStore);
 
   private toast = inject(ToastService);
-  
+
+  accountId = this.route.snapshot.paramMap.get('id'); // se tiver, é edit
+  isEditMode = computed(() => !!this.accountId);
 
   types: { value: AccountType; label: string }[] = [
     { value: 'Bank', label: 'Conta corrente' },
@@ -52,6 +53,28 @@ export class AccountCreatePageComponent {
     type: this.fb.control<AccountType | null>(null, [Validators.required]),
   });
 
+  ngOnInit(): void {
+    if (!this.accountId) return;
+
+    this.store.load(this.accountId);
+
+    // quando carregar, preenche o form
+    // (simples e direto; depois podemos deixar com effect/subscribe)
+    const interval = setInterval(() => {
+      const acc = this.store.account();
+      if (!acc) return;
+
+      this.form.patchValue(
+        {
+          name: acc.name,
+          type: acc.type as AccountType,
+        },
+        { emitEvent: false },
+      );
+      clearInterval(interval);
+    }, 50);
+  }
+
   submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -60,6 +83,21 @@ export class AccountCreatePageComponent {
 
     const v = this.form.getRawValue();
 
+    if (this.accountId) {
+      this.store.update(
+        this.accountId,
+        {
+          name: v.name!,
+          type: v.type!,
+        },
+        () => {
+          this.toast.success('Conta atualizada com sucesso.');
+          this.router.navigate(['/accounts']);
+        },
+      );
+      return;
+    }
+
     this.store.create(
       {
         name: v.name!,
@@ -67,7 +105,7 @@ export class AccountCreatePageComponent {
       },
       () => {
         this.toast.success('Conta criada com sucesso.');
-        this.router.navigate(['/accounts'])
+        this.router.navigate(['/accounts']);
       },
     );
   }
