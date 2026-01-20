@@ -8,4 +8,11 @@ export const ACCOUNTS_ROUTES: Routes = [
         (m) => m.AccountListPageComponent,
       ),
   },
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./pages/account-create-page/account-create-page.component').then(
+        (m) => m.AccountCreatePageComponent,
+      ),
+  },
 ];

@@ -33,4 +33,30 @@ export class AccountsStore {
       },
     });
   }
+
+  activate(id: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.activate(id).subscribe({
+      next: () => this.load(),
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  deactivate(id: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.deactivate(id).subscribe({
+      next: () => this.load(),
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
 }
