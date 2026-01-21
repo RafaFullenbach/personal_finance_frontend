@@ -27,7 +27,6 @@ export class SidebarComponent {
     { label: 'Contas', icon: 'account_balance', path: '/accounts' },
     { label: 'Categorias', icon: 'category', path: '/categories' },
     { label: 'Orçamentos', icon: 'pie_chart', path: '/budgets' },
-    { label: 'Relatórios', icon: 'analytics', path: '/reports' },
     { label: 'Recorrência', icon: 'repeat', path: '/recurring' },
     { label: 'Fechamento', icon: 'event_available', path: '/closing' },
     { label: 'Transferências', icon: 'swap_horiz', path: '/transfers' },

@@ -16,8 +16,10 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { toastInterceptor } from './core/http/toast.interceptor';
+import { Chart, registerables } from 'chart.js';
 
 registerLocaleData(localePt);
+Chart.register(...registerables);
 
 export const appConfig: ApplicationConfig = {
   providers: [
