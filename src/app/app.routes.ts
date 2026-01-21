@@ -37,6 +37,13 @@ export const routes: Routes = [
             (m) => m.CATEGORIES_ROUTES,
           ),
       },
+      {
+        path: 'budgets',
+        loadChildren: () =>
+          import('./features/budgets/budgets.routes').then(
+            (m) => m.BUDGETS_ROUTES,
+          ),
+      },
     ],
   },
 ];

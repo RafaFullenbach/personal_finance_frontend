@@ -1,0 +1,118 @@
+<div class="h-full flex flex-col min-h-0">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">Orçamentos</h1>
+      <p class="text-2xl text-slate-500">
+        Visualize limites por categoria no mês.
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      (click)="goNew()"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+        <span class="text-2xl font-medium leading-none">Novo orçamento</span>
+      </span>
+    </button>
+  </div>
+
+  <form
+    class="w-full flex gap-4 mb-6 mt-2"
+    [formGroup]="periodForm"
+    (ngSubmit)="applyPeriod()"
+  >
+    <mat-form-field appearance="outline" class="w-[160px]">
+      <mat-label>Ano</mat-label>
+      <mat-select formControlName="year">
+        @for (y of years; track y) {
+          <mat-option [value]="y">{{ y }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-[160px]">
+      <mat-label>Mês</mat-label>
+      <mat-select formControlName="month">
+        @for (m of months; track m.value) {
+          <mat-option [value]="m.value">{{ m.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !h-[5.6rem] !px-16"
+      type="submit"
+    >
+      <span class="font-medium leading-none" style="font-size: 1.4rem"
+        >Aplicar</span
+      >
+    </button>
+  </form>
+
+  @if (store.vm().error; as err) {
+    <div
+      class="mb-4 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800"
+    >
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  @if (store.vm().loading) {
+    <div class="mt-6">Carregando...</div>
+  } @else {
+    <div
+      class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 min-h-0 flex flex-col"
+    >
+      <div class="flex-1 min-h-0 overflow-auto">
+        <table
+          mat-table
+          [dataSource]="store.vm().items"
+          class="w-full table-lg"
+        >
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Categoria</th>
+            <td mat-cell *matCellDef="let r">{{ r.categoryName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="limit">
+            <th mat-header-cell *matHeaderCellDef>Limite</th>
+            <td mat-cell *matCellDef="let r">
+              {{ r.limitAmount | number: "1.2-2" }}
+            </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef>Ativar/Desativar</th>
+            <td mat-cell *matCellDef="let a">
+              <mat-slide-toggle
+                [checked]="a.isActive"
+                (change)="a.isActive ? deactivate(a.id) : activate(a.id)"
+              ></mat-slide-toggle>
+            </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef class="w-[140px]">Editar</th>
+            <td mat-cell *matCellDef="let r">
+              <button mat-icon-button (click)="goEdit(r)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+  }
+</div>

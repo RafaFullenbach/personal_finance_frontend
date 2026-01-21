@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CategoriesStore } from '../../data-access/categories.store';
 import { ToastService } from '../../../../core/ui/toast.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-categories-list-page',
@@ -20,6 +21,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatButtonModule,
     MatIconModule,
     MatSlideToggleModule,
+    MatTooltipModule,
   ],
   providers: [CategoriesStore],
   templateUrl: './categories-list-page.component.html',

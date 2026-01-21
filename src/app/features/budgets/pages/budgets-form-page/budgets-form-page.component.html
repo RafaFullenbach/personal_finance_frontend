@@ -1,0 +1,122 @@
+<div class="h-full flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">
+        {{ isEditMode() ? "Editar orçamento" : "Novo orçamento" }}
+      </h1>
+      <p class="text-slate-500 text-2xl">
+        {{
+          isEditMode()
+            ? "Edite o limite de uma categoria no mês selecionado."
+            : "Defina o limite de uma categoria no mês selecionado."
+        }}
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      [routerLink]="['/budgets']"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">arrow_back</mat-icon>
+        <span class="text-2xl font-medium leading-none">Voltar</span>
+      </span>
+    </button>
+  </div>
+
+  @if (store.error(); as err) {
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  <form
+    [formGroup]="form"
+    class="rounded-lg border border-slate-200 bg-white p-6"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <mat-form-field appearance="outline" class="md:col-span-2">
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoryId">
+          @for (c of categoriesStore.items(); track c.id) {
+            <mat-option [value]="c.id">{{ c.name }}</mat-option>
+          }
+        </mat-select>
+
+        @if (
+          form.controls.categoryId.touched && form.controls.categoryId.invalid
+        ) {
+          <mat-error>Selecione uma categoria</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ano</mat-label>
+        <mat-select formControlName="year">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Mês</mat-label>
+        <mat-select formControlName="month">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="md:col-span-2">
+        <mat-label>Limite</mat-label>
+        <input matInput type="number" formControlName="limitAmount" />
+        @if (
+          form.controls.limitAmount.touched && form.controls.limitAmount.invalid
+        ) {
+          <mat-error>Informe um limite válido</mat-error>
+        }
+      </mat-form-field>
+      <!-- 
+      <mat-form-field appearance="outline">
+        <mat-label>Ativo</mat-label>
+        <mat-select formControlName="isActive">
+          <mat-option [value]="true">Sim</mat-option>
+          <mat-option [value]="false">Não</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+    </div>
+
+    <div class="flex items-center justify-end gap-3 mt-6">
+      <button
+        mat-flat-button
+        class="!rounded-lg !py-3 !px-6 action-cancel"
+        [routerLink]="['/budgets']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">block</mat-icon>
+          <span class="text-2xl font-medium leading-none">Cancelar</span>
+        </span>
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg"
+        type="button"
+        (click)="submit()"
+        [disabled]="store.loading()"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">save</mat-icon>
+          <span class="text-2xl font-medium leading-none">Salvar</span>
+        </span>
+      </button>
+    </div>
+  </form>
+</div>
