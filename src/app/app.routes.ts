@@ -43,6 +43,13 @@ export const routes: Routes = [
             (m) => m.BUDGETS_ROUTES,
           ),
       },
+      {
+        path: 'transfers',
+        loadChildren: () =>
+          import('./features/transfers/transfers.routes').then(
+            (m) => m.transfersRoutes,
+          ),
+      },
     ],
   },
 ];

@@ -116,7 +116,7 @@ export class TransactionsListPageComponent implements OnInit {
   }
 
   cancel(id: string) {
-    this.toast.success('Lançamento cancelado com sucesso.');
+    this.toast.error('Lançamento cancelado com sucesso.');
     this.store.cancel(id);
   }
 }
