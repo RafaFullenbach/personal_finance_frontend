@@ -30,13 +30,26 @@ export interface BudgetVsActualItemDto {
   status: BudgetStatus;
 }
 
+export type CategorySummaryType = 'Expense' | 'Income';
+
+export interface CategorySummaryItemDto {
+  categoryId: string;
+  categoryName: string;
+  categoryType: string; // Expense / Income
+  totalAmount: number;
+  transactionsCount: number;
+  percentage: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ReportsApi {
   private http = inject(HttpClient);
 
   monthlySummary(year: number, month: number) {
     const params = new HttpParams().set('year', year).set('month', month);
-    return this.http.get<MonthlySummaryDto>('/reports/monthly-summary', { params });
+    return this.http.get<MonthlySummaryDto>('/reports/monthly-summary', {
+      params,
+    });
   }
 
   balance(dateIso: string) {
@@ -46,6 +59,20 @@ export class ReportsApi {
 
   budgetVsActual(year: number, month: number) {
     const params = new HttpParams().set('year', year).set('month', month);
-    return this.http.get<BudgetVsActualItemDto[]>('/reports/budget-vs-actual', { params });
+    return this.http.get<BudgetVsActualItemDto[]>('/reports/budget-vs-actual', {
+      params,
+    });
+  }
+
+  categorySummary(year: number, month: number, type?: CategorySummaryType) {
+    let hp = new HttpParams().set('year', year).set('month', month);
+    if (type) hp = hp.set('type', type);
+
+    return this.http.get<CategorySummaryItemDto[]>(
+      '/reports/category-summary',
+      {
+        params: hp,
+      },
+    );
   }
 }

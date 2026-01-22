@@ -16,10 +16,21 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { toastInterceptor } from './core/http/toast.interceptor';
-import { Chart, registerables } from 'chart.js';
+import { ArcElement, BarController, BarElement, CategoryScale, Chart, DoughnutController, Legend, LinearScale, registerables, Tooltip } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 registerLocaleData(localePt);
-Chart.register(...registerables);
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  DoughnutController,
+  ArcElement,
+  ChartDataLabels,
+);
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,11 +1,12 @@
+// src/app/features/dashboard/data-access/dashboard.store.ts
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {
   ReportsApi,
   BalanceDto,
-  BudgetVsActualItemDto,
   MonthlySummaryDto,
+  CategorySummaryItemDto,
 } from './reports.api';
 import { AppError } from '../../../core/error/app-error';
 
@@ -26,7 +27,6 @@ function addMonths(year: number, month: number, delta: number) {
 export class DashboardStore {
   private api = inject(ReportsApi);
 
-  // período do dashboard
   readonly year = signal<number>(new Date().getFullYear());
   readonly month = signal<number>(new Date().getMonth() + 1);
 
@@ -36,10 +36,11 @@ export class DashboardStore {
   readonly balance = signal<BalanceDto | null>(null);
   readonly monthly = signal<MonthlySummaryDto | null>(null);
 
-  // ✅ deixa, mas NÃO carrega no loadAll
-  readonly budgetVsActual = signal<BudgetVsActualItemDto[]>([]);
+  // novos dados (pizzas)
+  readonly expenseCats = signal<CategorySummaryItemDto[]>([]);
+  readonly incomeCats = signal<CategorySummaryItemDto[]>([]);
 
-  // chart
+  // bar chart
   readonly chartData = signal<ChartConfiguration<'bar'>['data']>({
     labels: [],
     datasets: [],
@@ -48,13 +49,26 @@ export class DashboardStore {
   readonly chartOptions = signal<ChartConfiguration<'bar'>['options']>({
     responsive: true,
     maintainAspectRatio: false,
+    plugins: { legend: { display: true }, tooltip: { enabled: true } },
+  });
+
+  // pie charts (data)
+  readonly expensePieData = signal<ChartConfiguration<'pie'>['data']>({
+    labels: [],
+    datasets: [],
+  });
+
+  readonly incomePieData = signal<ChartConfiguration<'pie'>['data']>({
+    labels: [],
+    datasets: [],
+  });
+
+  readonly pieOptions = signal<ChartConfiguration<'pie'>['options']>({
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: { display: true },
+      legend: { display: true, position: 'bottom' },
       tooltip: { enabled: true },
-    },
-    scales: {
-      x: { ticks: { font: { size: 12 } } },
-      y: { ticks: { font: { size: 12 } } },
     },
   });
 
@@ -63,11 +77,17 @@ export class DashboardStore {
     error: this.error(),
     balance: this.balance(),
     monthly: this.monthly(),
-    // continua exposto caso você queira usar em outra tela
-    budgetVsActual: this.budgetVsActual(),
+    monthLabel: monthLabelPt(this.year(), this.month()),
+
     chartData: this.chartData(),
     chartOptions: this.chartOptions(),
-    monthLabel: monthLabelPt(this.year(), this.month()),
+
+    expensePieData: this.expensePieData(),
+    incomePieData: this.incomePieData(),
+    pieOptions: this.pieOptions(),
+
+    expenseCats: this.expenseCats(),
+    incomeCats: this.incomeCats(),
   }));
 
   setPeriod(year: number, month: number) {
@@ -75,14 +95,6 @@ export class DashboardStore {
     this.month.set(month);
   }
 
-  /**
-   * ✅ Dashboard leve:
-   * - balance (até hoje)
-   * - monthly summary (mês selecionado)
-   * - série últimos 6 meses (para o gráfico)
-   *
-   * ❌ NÃO carrega budget-vs-actual
-   */
   loadAll() {
     this.loading.set(true);
     this.error.set(null);
@@ -98,9 +110,14 @@ export class DashboardStore {
     forkJoin({
       balance: this.api.balance(todayIso),
       monthly: this.api.monthlySummary(y, m),
+      // barras (6 meses)
       series: forkJoin(
         last6.map((p) => this.api.monthlySummary(p.year, p.month)),
       ),
+
+      // pizzas
+      expense: this.api.categorySummary(y, m, 'Expense'),
+      income: this.api.categorySummary(y, m, 'Income'),
     })
       .pipe(
         catchError((e) => {
@@ -115,6 +132,7 @@ export class DashboardStore {
         this.balance.set(res.balance);
         this.monthly.set(res.monthly);
 
+        // ===== bar chart =====
         const labels = last6.map((p) => monthLabelPt(p.year, p.month));
         const credits = res.series.map((s) => s.totalCredits);
         const debits = res.series.map((s) => s.totalDebits);
@@ -127,40 +145,32 @@ export class DashboardStore {
           ],
         });
 
+        // ===== pizzas =====
+        this.expenseCats.set(res.expense ?? []);
+        this.incomeCats.set(res.income ?? []);
+
+        this.expensePieData.set({
+          labels: (res.expense ?? []).map((x) => x.categoryName),
+          datasets: [
+            {
+              // melhor usar totalAmount do que percentage (tooltip fica mais útil)
+              label: 'Despesas',
+              data: (res.expense ?? []).map((x) => x.percentage),
+            },
+          ],
+        });
+
+        this.incomePieData.set({
+          labels: (res.income ?? []).map((x) => x.categoryName),
+          datasets: [
+            {
+              label: 'Receitas',
+              data: (res.income ?? []).map((x) => x.percentage),
+            },
+          ],
+        });
+
         this.loading.set(false);
       });
-  }
-
-  /**
-   * ✅ Carrega Budget vs Actual sob demanda (para outra tela)
-   */
-  loadBudgetVsActual() {
-    this.loading.set(true);
-    this.error.set(null);
-
-    const y = this.year();
-    const m = this.month();
-
-    this.api
-      .budgetVsActual(y, m)
-      .pipe(
-        catchError((e) => {
-          this.error.set(e);
-          this.loading.set(false);
-          return of(null);
-        }),
-      )
-      .subscribe((items) => {
-        if (!items) return;
-        this.budgetVsActual.set(items);
-        this.loading.set(false);
-      });
-  }
-
-  /**
-   * Opcional: se você quiser garantir que não fica dado “velho”
-   */
-  clearBudgetVsActual() {
-    this.budgetVsActual.set([]);
   }
 }
