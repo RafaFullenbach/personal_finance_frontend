@@ -1,0 +1,65 @@
+<div class="h-full flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">Fechamento</h1>
+      <p class="text-2xl text-slate-500">
+        Feche um mês de competência. Opcionalmente confirma pendentes.
+      </p>
+    </div>
+  </div>
+
+  @if (store.error(); as err) {
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  <form
+    class="rounded-lg border border-slate-200 bg-white p-6 max-w-[720px] w-full flex gap-4 mb-6 mt-2"
+    [formGroup]="form"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Ano</mat-label>
+      <mat-select formControlName="year">
+        @for (y of years; track y) {
+          <mat-option [value]="y">{{ y }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mês</mat-label>
+      <mat-select formControlName="month">
+        @for (m of months; track m.value) {
+          <mat-option [value]="m.value">{{ m.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <div class="md:col-span-2 pt-2">
+        <mat-slide-toggle formControlName="autoConfirmPending">
+          Confirmar automaticamente transações pendentes
+        </mat-slide-toggle>
+
+        <p class="text-slate-500 mt-2">
+          Se ligado, o backend vai confirmar as pendentes ao fechar.
+        </p>
+      </div> -->
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !h-[5.6rem] !px-16"
+      type="button"
+      (click)="submit()"
+      [disabled]="store.loading()"
+    >
+      <span class="font-medium leading-none" style="font-size: 1.4rem"
+        >Fechar mês</span
+      >
+    </button>
+  </form>
+</div>

@@ -50,6 +50,13 @@ export const routes: Routes = [
             (m) => m.transfersRoutes,
           ),
       },
+      {
+        path: 'months',
+        loadChildren: () =>
+          import('./features/months/months.routes').then(
+            (m) => m.MONTHS_ROUTES,
+          ),
+      },
     ],
   },
 ];
