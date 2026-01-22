@@ -30,6 +30,15 @@ export interface BudgetVsActualItemDto {
   status: BudgetStatus;
 }
 
+export interface AccountBalanceDto {
+  accountId: string;
+  date: string; // ISO
+  totalCredits: number;
+  totalDebits: number;
+  balance: number;
+  transactionsCount: number;
+}
+
 export type CategorySummaryType = 'Expense' | 'Income';
 
 export interface CategorySummaryItemDto {
@@ -74,5 +83,11 @@ export class ReportsApi {
         params: hp,
       },
     );
+  }
+
+  accountBalance(accountId: string, dateIso: string) {
+    return this.http.get<AccountBalanceDto>('/reports/account-balance', {
+      params: { accountId, date: dateIso },
+    });
   }
 }

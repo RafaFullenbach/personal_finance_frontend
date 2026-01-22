@@ -21,6 +21,12 @@ export interface AccountResponse {
   isActive: boolean;
 }
 
+export interface AccountListItemDto {
+  id: Guid;
+  name: string;
+  isActive: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AccountsApi {
   private http = inject(HttpClient);

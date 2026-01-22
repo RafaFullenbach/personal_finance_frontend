@@ -1,23 +1,37 @@
 <div class="h-full flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-4xl font-semibold">Contas</h1>
+      <h1 class="text-4xl font-semibold mb-1">Contas</h1>
       <p class="text-slate-500 text-2xl">
         Gerencie suas contas (bancos, carteiras, investimentos).
       </p>
     </div>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="!rounded-lg !py-3 !px-6"
-      [routerLink]="['/accounts/new']"
-    >
-      <span class="flex items-center gap-3">
-        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
-        <span class="text-2xl font-medium leading-none">Nova conta</span>
-      </span>
-    </button>
+    <div class="flex gap-10">
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/accounts/balance']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">account_balance</mat-icon>
+          <span class="text-2xl font-medium leading-none">Balanço das contas</span>
+        </span>
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/accounts/new']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+          <span class="text-2xl font-medium leading-none">Nova conta</span>
+        </span>
+      </button>
+    </div>
   </div>
 
   @if (store.vm().error; as err) {

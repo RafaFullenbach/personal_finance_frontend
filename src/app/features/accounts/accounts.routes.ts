@@ -22,4 +22,11 @@ export const ACCOUNTS_ROUTES: Routes = [
         (m) => m.AccountsUpsertPageComponent,
       ),
   },
+  {
+    path: 'balance',
+    loadComponent: () =>
+      import('./pages/accounts-balance-page/accounts-balance-page.component').then(
+        (m) => m.AccountsBalancePageComponent,
+      ),
+  },
 ];
