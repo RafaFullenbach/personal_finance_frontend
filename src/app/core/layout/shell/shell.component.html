@@ -1,4 +1,4 @@
-<mat-sidenav-container class="shell-container">
+<mat-sidenav-container class="h-full border-r pf-surface pf-text">
   <mat-sidenav class="shell-sidenav" [mode]="'side'" [opened]="opened">
     <div class="sidebar-frame">
       <app-sidebar class="h-full w-full"></app-sidebar>
@@ -6,18 +6,24 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="shell-content">
-    <mat-toolbar class="shell-toolbar">
+    <mat-toolbar class="flex justify-between items-center pf-surface pf-text">
       <button mat-icon-button (click)="toggle()" aria-label="Toggle sidebar">
         <mat-icon>menu</mat-icon>
       </button>
 
-      <span class="text-3xl">Personal Finance</span>
-
-      <span class="flex-1"></span>
+      <button
+        mat-icon-button
+        (click)="toggleTheme()"
+        [matTooltip]="theme.theme() === 'dark' ? 'Modo claro' : 'Modo escuro'"
+      >
+        <mat-icon>{{
+          theme.theme() === "dark" ? "light_mode" : "dark_mode"
+        }}</mat-icon>
+      </button>
     </mat-toolbar>
 
     <main class="shell-main">
-      <div class="shell-page">
+      <div class="shell-page pf-surface pf-text">
         <router-outlet></router-outlet>
       </div>
     </main>

@@ -1,5 +1,7 @@
 @use "@angular/material" as mat;
 
+@include mat.core();
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,24 +15,38 @@
   }
 }
 
-html {
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-}
+// Paletas (M2)
+$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$accent: mat.m2-define-palette(mat.$m2-blue-palette);
+$warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Tema LIGHT (M2)
+$light-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
+
+// Tema DARK (M2)
+$dark-theme: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
 
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -40,7 +56,6 @@ body {
 * {
   margin: 0;
   padding: 0;
-
   box-sizing: border-box;
 
   -webkit-font-smoothing: antialiased;
@@ -55,6 +70,86 @@ body {
       supporting-text-size: 1.1rem,
     )
   );
+
+  // Gera tudo (inclui density/typography/etc)
+  @include mat.all-component-themes($light-theme);
+
+  mat-toolbar.mat-toolbar {
+    --mat-toolbar-container-background-color: #fff;
+    --mat-toolbar-container-text-color: #000;
+  }
+
+  --pf-bg: #f8fafc; /* fundo geral */
+  --pf-surface: #ffffff; /* cards/containers */
+  --pf-surface-2: #f1f5f9; /* superfície alternativa */
+  --pf-border: #e2e8f0;
+  --pf-text: #0f172a;
+  --pf-muted: #64748b;
+  --pf-data-label: #080808;
+
+  .mat-mdc-table .mat-mdc-row:nth-child(odd) {
+    background-color: var(--pf-surface) !important;
+  }
+
+  .mat-mdc-table .mat-mdc-row:nth-child(even) {
+    background: rgba(136, 140, 145, 0.06) !important;
+  }
+}
+
+html.dark {
+  // Gera apenas CORES (evita duplicar density)
+  @include mat.all-component-colors($dark-theme);
+
+  mat-toolbar.mat-toolbar {
+    --mat-toolbar-container-background-color: #000;
+    --mat-toolbar-container-text-color: #fff;
+  }
+
+  .mat-mdc-table {
+    background: var(--pf-surface) !important;
+  }
+
+  .mat-mdc-header-row,
+  .mat-mdc-row {
+    color: var(--pf-text) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: var(--pf-muted) !important;
+  }
+
+  .mat-mdc-row:hover {
+    background: rgba(148, 163, 184, 0.08) !important;
+  }
+
+  /* ✅ variáveis CSS precisam ser propriedades */
+  & {
+    --pf-bg: #0b1220;
+    --pf-surface: #111827;
+    --pf-surface-2: #0f172a;
+    --pf-border: rgba(148, 163, 184, 0.2);
+    --pf-text: #e5e7eb;
+    --pf-muted: #94a3b8;
+    --pf-data-label: #f8f1f1;
+  }
+}
+
+.pf-surface {
+  background: var(--pf-surface) !important;
+  color: var(--pf-text) !important;
+  border-color: var(--pf-border) !important;
+}
+
+.pf-muted {
+  color: var(--pf-muted) !important;
+}
+
+.pf-text {
+  color: var(--pf-text) !important;
+}
+
+.pf-card {
+  background: var(--pf-card) !important;
 }
 
 // Ajuste de padding para não cortar itens ao aumentar a fonte do select

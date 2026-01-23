@@ -33,7 +33,3 @@ mat-error {
   min-height: 4.4rem;
   align-items: center;
 }
-
-:host ::ng-deep button.action-cancel {
-  background-color: var(--mat-sys-error) !important;
-}

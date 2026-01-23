@@ -24,6 +24,11 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 // ✅ registra chart.js + plugin de datalabels
 Chart.register(...registerables, ChartDataLabels);
 
+const cssVar = (name: string, el: HTMLElement = document.documentElement) =>
+  getComputedStyle(el).getPropertyValue(name).trim();
+
+const positive = cssVar('--pf-data-label');
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -42,6 +47,7 @@ Chart.register(...registerables, ChartDataLabels);
 export class DashboardComponent implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
+  private themeObs?: MutationObserver;
 
   store = inject(DashboardStore);
   vm = this.store.vm;
@@ -108,6 +114,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // nada aqui; o effect já cuida quando o canvas existir + vm atualizar
+    this.themeObs = new MutationObserver(() => this.applyDataLabelColor());
+    this.themeObs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
   }
 
   reload() {
@@ -124,6 +135,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = this.barCanvas!.nativeElement.getContext('2d')!;
     this.barChart?.destroy();
     this.barChart = new Chart(ctx, { type: 'bar', data, options });
+    this.applyDataLabelColor();
+  }
+
+  private applyDataLabelColor() {
+    const textColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--pf-data-label')
+        .trim() || '#fff';
+
+    (this.barChart?.options as any).plugins ??= {};
+    (this.barChart?.options as any).plugins.datalabels ??= {};
+    (this.barChart?.options as any).plugins.datalabels.color = textColor;
+
+    this.barChart?.update();
   }
 
   private renderExpensePie(

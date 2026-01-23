@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { ThemeService } from '../../theme/theme.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   standalone: true,
@@ -19,6 +21,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
     MatIconModule,
     MatButtonModule,
     SidebarComponent,
+    MatTooltipModule,
   ],
   templateUrl: './shell.component.html',
   styleUrls: ['./shell.component.scss'],
@@ -29,5 +32,11 @@ export class ShellComponent {
 
   toggle() {
     this.opened = !this.opened;
+  }
+
+  theme = inject(ThemeService);
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 }

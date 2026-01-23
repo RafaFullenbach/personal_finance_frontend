@@ -16,23 +16,6 @@
   font-size: 2rem;
 }
 
-:host ::ng-deep .mat-mdc-paginator .mat-mdc-select-value-text {
-  font-size: 1.3rem;
-}
-
-/* Label "Itens por página" */
-:host ::ng-deep .mat-mdc-paginator-page-size-label {
-  font-size: 1.3rem;
-}
-
-:host ::ng-deep .mat-mdc-table .mat-mdc-row:nth-child(even) {
-  background: rgba(190, 193, 197, 0.06);
-}
-
-:host ::ng-deep .mat-mdc-table .mat-mdc-row:nth-child(odd) {
-  background-color: white;
-}
-
 ::ng-deep .mat-mdc-select-panel .mat-mdc-option {
   font-size: 1.4rem;
 }

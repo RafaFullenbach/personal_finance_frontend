@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-4xl font-semibold mb-1">Dashboard</h1>
-      <p class="text-2xl text-slate-500">Visão geral das suas finanças.</p>
+      <p class="text-2xl pf-muted">Visão geral das suas finanças.</p>
     </div>
   </div>
 
@@ -55,54 +55,54 @@
     <div class="flex flex-col gap-6">
       <!-- KPIs -->
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <mat-card class="!rounded-lg !border !border-slate-200">
+        <mat-card class="!rounded-lg !border !border-slate-200 pf-surface">
           <mat-card-content class="py-4">
-            <div class="text-slate-500">Saldo até hoje</div>
+            <div class="pf-muted">Saldo até hoje</div>
             <div class="text-4xl font-semibold mt-2">
               {{ vm().balance?.balance | number: "1.2-2" }}
             </div>
-            <div class="text-slate-500 mt-1 text-lg">
+            <div class="pf-muted mt-1 text-lg">
               {{ vm().balance?.date | date: "dd/MM/yyyy" }} •
               {{ vm().balance?.transactionsCount }} transações
             </div>
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="!rounded-lg !border !border-slate-200">
+        <mat-card class="!rounded-lg !border !border-slate-200 pf-surface">
           <mat-card-content class="py-4">
-            <div class="text-slate-500">Receitas (mês)</div>
+            <div class="pf-muted">Receitas (mês)</div>
             <div class="text-4xl font-semibold mt-2">
               {{ vm().monthly?.totalCredits | number: "1.2-2" }}
             </div>
-            <div class="text-slate-500 mt-1 text-lg">
+            <div class="pf-muted mt-1 text-lg">
               {{ vm().monthLabel }}
             </div>
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="!rounded-lg !border !border-slate-200">
+        <mat-card class="!rounded-lg !border !border-slate-200 pf-surface">
           <mat-card-content class="py-4">
-            <div class="text-slate-500">Despesas (mês)</div>
+            <div class="pf-muted">Despesas (mês)</div>
             <div class="text-4xl font-semibold mt-2">
               {{ vm().monthly?.totalDebits | number: "1.2-2" }}
             </div>
-            <div class="text-slate-500 mt-1 text-lg">
+            <div class="pf-muted mt-1 text-lg">
               {{ vm().monthLabel }}
             </div>
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="!rounded-lg !border !border-slate-200">
+        <mat-card class="!rounded-lg !border !border-slate-200 pf-surface">
           <mat-card-content class="py-4">
-            <div class="text-slate-500">Líquido (mês)</div>
+            <div class="pf-muted">Líquido (mês)</div>
             <div
-              class="text-4xl font-semibold mt-2"
+              class="text-4xl font-semibold mt-2 drop-shadow-sm"
               [class.text-green-700]="(vm().monthly?.net ?? 0) >= 0"
               [class.text-red-700]="(vm().monthly?.net ?? 0) < 0"
             >
               {{ vm().monthly?.net | number: "1.2-2" }}
             </div>
-            <div class="text-slate-500 mt-1 text-sm">
+            <div class="pf-muted mt-1 text-sm">
               {{ vm().monthly?.transactionsCount }} transações
             </div>
           </mat-card-content>
@@ -113,11 +113,11 @@
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Bar -->
         <div
-          class="rounded-lg border border-slate-200 bg-white p-4 xl:col-span-2"
+          class="rounded-lg border border-slate-200 pf-surface p-4 xl:col-span-2"
         >
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-3xl font-semibold">Receitas vs Despesas</h2>
-            <span class="text-slate-500 text-lg">Últimos 6 meses</span>
+            <span class="pf-muted text-lg">Últimos 6 meses</span>
           </div>
 
           <div class="h-[420px] relative">
@@ -126,7 +126,7 @@
         </div>
 
         <!-- Pie Expense -->
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <div class="rounded-lg border pf-text pf-surface p-4">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-3xl font-semibold">Despesas por categoria</h2>
           </div>
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Pie Income (full row) -->
-        <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <div class="rounded-lg border pf-text pf-surface p-4">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-3xl font-semibold">Receitas por categoria</h2>
           </div>
