@@ -79,14 +79,16 @@ body {
     --mat-toolbar-container-text-color: #000;
   }
 
-  --pf-bg: #f8fafc; /* fundo geral */
-  --pf-surface: #ffffff; /* cards/containers */
-  --pf-surface-2: #f1f5f9; /* superfície alternativa */
-  --pf-border: #e2e8f0;
-  --pf-text: #0f172a;
-  --pf-muted: #64748b;
-  --pf-data-label: #080808;
-
+  & {
+    --pf-bg: #f8fafc; /* fundo geral */
+    --pf-surface: #ffffff; /* cards/containers */
+    --pf-surface-2: #f1f5f9; /* superfície alternativa */
+    --pf-border: #e2e8f0;
+    --pf-text: #0f172a;
+    --pf-muted: #64748b;
+    --pf-data-label: #080808;
+  }
+  
   .mat-mdc-table .mat-mdc-row:nth-child(odd) {
     background-color: var(--pf-surface) !important;
   }
@@ -131,6 +133,16 @@ html.dark {
     --pf-text: #e5e7eb;
     --pf-muted: #94a3b8;
     --pf-data-label: #f8f1f1;
+  }
+
+  /* cor do texto do option selecionado */
+  .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+    color: var(--pf-text) !important; // ou uma cor sua
+  }
+
+  /* cor do check (ícone) do selecionado */
+  .mat-mdc-option.mdc-list-item--selected .mat-pseudo-checkbox-minimal::after {
+    color: var(--pf-muted) !important; // ou #fff / etc
   }
 }
 
