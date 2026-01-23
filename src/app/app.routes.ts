@@ -57,6 +57,13 @@ export const routes: Routes = [
             (m) => m.MONTHS_ROUTES,
           ),
       },
+      {
+        path: 'recurring',
+        loadChildren: () =>
+          import('./features/recurring/recurring.routes').then(
+            (m) => m.recurringRoutes,
+          ),
+      },
     ],
   },
 ];

@@ -1,0 +1,71 @@
+<div class="h-full flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">Gerar recorrências</h1>
+      <p class="text-slate-500 text-2xl">
+        Gera transações recorrentes para um mês.
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      [routerLink]="['/recurring']"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">arrow_back</mat-icon>
+        <span class="text-2xl font-medium leading-none">Voltar</span>
+      </span>
+    </button>
+  </div>
+
+  @if (store.error(); as err) {
+    <div class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800">
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  <div class="rounded-lg border border-slate-200 bg-white p-6 max-w-[620px]">
+    <form [formGroup]="form" class="w-full flex gap-4 mb-6 mt-2">
+      <mat-form-field appearance="outline" class="w-[160px]">
+        <mat-label>Ano</mat-label>
+        <mat-select formControlName="year">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-[160px]">
+        <mat-label>Mês</mat-label>
+        <mat-select formControlName="month">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !h-[5.6rem] !px-16"
+        type="button"
+        (click)="generate()"
+        [disabled]="store.loading()"
+      >
+        <span class="font-medium leading-none" style="font-size: 1.4rem">
+          Gerar
+        </span>
+      </button>
+    </form>
+
+    <div class="text-slate-500 text-lg">
+      Dica: use isso no começo do mês para lançar automaticamente as
+      recorrências.
+    </div>
+  </div>
+</div>

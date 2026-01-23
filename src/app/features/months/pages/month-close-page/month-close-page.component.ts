@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,6 @@ import { MonthCloseStore } from '../../data-access/months-close.store';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     MatFormFieldModule,
     MatSelectModule,
     MatSlideToggleModule,

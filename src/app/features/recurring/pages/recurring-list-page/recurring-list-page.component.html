@@ -1,0 +1,109 @@
+<div class="h-full flex flex-col min-h-0">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-4xl font-semibold mb-1">Recorrência</h1>
+      <p class="text-2xl text-slate-500">Gerencie suas recorrências.</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/recurring/generate']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">start</mat-icon>
+          <span class="text-2xl font-medium leading-none"
+            >Gerar recorrências</span
+          >
+        </span>
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/recurring/new']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+          <span class="text-2xl font-medium leading-none"
+            >Nova recorrência</span
+          >
+        </span>
+      </button>
+    </div>
+  </div>
+
+  @if (store.vm().error; as err) {
+    <div
+      class="mb-4 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800"
+    >
+      {{ err.message }}
+      @if (err.code) {
+        <span class="ml-2 text-xs opacity-80">({{ err.code }})</span>
+      }
+    </div>
+  }
+
+  @if (store.vm().loading) {
+    <div class="mt-6">Carregando...</div>
+  } @else {
+    <div
+      class="rounded-lg border border-slate-200 bg-white overflow-hidden flex-1 min-h-0 mt-2"
+    >
+      <div class="overflow-auto">
+        <table mat-table [dataSource]="store.vm().items" class="w-full table-lg">
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Descrição</th>
+            <td mat-cell *matCellDef="let r">{{ r.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <td mat-cell *matCellDef="let r">
+              {{ r.amount | number: "1.2-2" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let r">{{ typeLabel(r.type) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="dayOfMonth">
+            <th mat-header-cell *matHeaderCellDef>Dia</th>
+            <td mat-cell *matCellDef="let r">{{ r.dayOfMonth }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="competenceOffsetMonths">
+            <th mat-header-cell *matHeaderCellDef>Offset competência</th>
+            <td mat-cell *matCellDef="let r">{{ r.competenceOffsetMonths }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Início</th>
+            <td mat-cell *matCellDef="let r">
+              {{ r.startDate | date: "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>Fim</th>
+            <td mat-cell *matCellDef="let r">
+              {{ r.endDate ? (r.endDate | date: "dd/MM/yyyy") : "-" }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        @if (store.vm().items.length === 0) {
+          <div class="p-4 text-slate-500">Nenhuma recorrência cadastrada.</div>
+        }
+      </div>
+    </div>
+  }
+</div>
