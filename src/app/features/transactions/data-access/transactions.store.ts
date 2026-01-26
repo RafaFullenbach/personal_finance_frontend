@@ -21,6 +21,7 @@ export class TransactionsStore {
   readonly filterMonth = signal<number | null>(null);
   readonly filterType = signal<TransactionType | null>(null);
   readonly filterStatus = signal<TransactionStatus | null>(null);
+  readonly filterDescription = signal<string>('');
   readonly sortBy = signal<string>('transactionDate');
   readonly order = signal<'asc' | 'desc'>('desc');
   readonly items = signal<TransactionsModel[]>([]);
@@ -57,6 +58,7 @@ export class TransactionsStore {
         month: this.filterMonth() ?? undefined,
         type: this.filterType() ?? undefined,
         status: this.filterStatus() ?? undefined,
+        description: this.filterDescription() || undefined,
         sortBy: this.sortBy(),
         order: this.order(),
       })
@@ -113,11 +115,13 @@ export class TransactionsStore {
     month: number | null;
     type: string | null;
     status: string | null;
+    description: string | null;
   }) {
     this.filterYear.set(f.year);
     this.filterMonth.set(f.month);
     this.filterType.set(f.type as any);
     this.filterStatus.set(f.status as any);
+    this.filterDescription.set((f.description ?? '').trim());
     this.page.set(1);
     this.load();
   }
@@ -126,6 +130,7 @@ export class TransactionsStore {
     this.filterYear.set(null);
     this.filterMonth.set(null);
     this.filterType.set(null);
+    this.filterDescription.set('');
     this.filterStatus.set(null);
     this.page.set(1);
     this.load();

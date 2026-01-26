@@ -5,7 +5,17 @@
       <p class="text-2xl text-slate-500">Comparativo por categoria.</p>
     </div>
 
-    <a mat-button class="!rounded-lg" [routerLink]="['/budgets']">Voltar</a>
+    <button
+      mat-flat-button
+      color="primary"
+      class="!rounded-lg !py-3 !px-6"
+      [routerLink]="['/budgets']"
+    >
+      <span class="flex items-center gap-3">
+        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">arrow_back</mat-icon>
+        <span class="text-2xl font-medium leading-none">Voltar</span>
+      </span>
+    </button>
   </div>
 
   <!-- filtros (igual outras páginas) -->

@@ -64,6 +64,7 @@ export class TransactionsApi {
     type?: TransactionType;
     status?: TransactionStatus;
     sortBy?: string;
+    description?: string;
     order?: 'asc' | 'desc';
   }) {
     let hp = new HttpParams()
@@ -74,6 +75,7 @@ export class TransactionsApi {
     if (params.month != null) hp = hp.set('month', params.month);
     if (params.type) hp = hp.set('type', params.type);
     if (params.status) hp = hp.set('status', params.status);
+    if (params.description) hp = hp.set('description', params.description);
 
     hp = hp.set('sortBy', params.sortBy ?? 'transactionDate');
     hp = hp.set('order', params.order ?? 'desc');

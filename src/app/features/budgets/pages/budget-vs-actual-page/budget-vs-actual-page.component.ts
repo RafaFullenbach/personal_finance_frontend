@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BudgetVsActualStore } from '../../data-access/budget-vs-actual.store';
 import { BudgetStatus } from '../../../dashboard/data-access/reports.api';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-budget-vs-actual-page',
@@ -21,6 +22,7 @@ import { BudgetStatus } from '../../../dashboard/data-access/reports.api';
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatIconModule,
   ],
   providers: [BudgetVsActualStore],
   templateUrl: './budget-vs-actual-page.component.html',
