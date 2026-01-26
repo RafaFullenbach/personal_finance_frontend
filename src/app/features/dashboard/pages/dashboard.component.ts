@@ -144,9 +144,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         .getPropertyValue('--pf-data-label')
         .trim() || '#fff';
 
+    const brl = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      maximumFractionDigits: 0, // sem centavos
+    });
+
     (this.barChart?.options as any).plugins ??= {};
     (this.barChart?.options as any).plugins.datalabels ??= {};
     (this.barChart?.options as any).plugins.datalabels.color = textColor;
+
+    (this.barChart?.options as any).plugins.datalabels.formatter = (
+      value: any,
+    ) => {
+      const n = typeof value === 'number' ? value : Number(value);
+      if (!Number.isFinite(n)) return value;
+      return brl.format(n); // 135435 -> "R$ 135.435"
+    };
 
     this.barChart?.update();
   }
@@ -161,20 +175,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = canvas.getContext('2d')!;
     this.expensePie?.destroy();
 
+    const color = this.getThemeTextColor();
+
     const mergedOptions: ChartConfiguration<'pie'>['options'] = {
       ...options,
       plugins: {
         ...(options?.plugins ?? {}),
-        // ✅ texto dentro da fatia
+
+        legend: {
+          ...(options?.plugins as any)?.legend,
+          labels: {
+            ...((options?.plugins as any)?.legend?.labels ?? {}),
+            color, // <- "Teste"
+          },
+        },
+
         datalabels: {
+          ...(options?.plugins as any)?.datalabels,
           formatter: (value: any) => {
             const v = Number(value ?? 0);
             return v >= 5 ? `${v.toFixed(0)}%` : '';
           },
           anchor: 'center',
           align: 'center',
-          color: '#fff',
-          font: { size: 15, weight: 'bold' },
+          color, // <- "100%"
+          font: { size: 15, weight: 'normal' },
           clamp: true,
         },
       },
@@ -184,6 +209,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       type: 'pie',
       data,
       options: mergedOptions,
+    });
+
+    // opcional: reage a troca de tema
+    this.observeThemeChanges(() => {
+      const c = this.getThemeTextColor();
+      (this.expensePie!.options.plugins as any).legend.labels.color = c;
+      (this.expensePie!.options.plugins as any).datalabels.color = c;
+      this.expensePie!.update();
     });
   }
 
@@ -197,20 +230,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = canvas.getContext('2d')!;
     this.incomePie?.destroy();
 
+    const color = this.getThemeTextColor();
+
     const mergedOptions: ChartConfiguration<'pie'>['options'] = {
       ...options,
       plugins: {
         ...(options?.plugins ?? {}),
-        // ✅ texto dentro da fatia
+
+        legend: {
+          ...(options?.plugins as any)?.legend,
+          labels: {
+            ...((options?.plugins as any)?.legend?.labels ?? {}),
+            color,
+          },
+        },
+
         datalabels: {
+          ...(options?.plugins as any)?.datalabels,
           formatter: (value: any) => {
             const v = Number(value ?? 0);
             return v >= 5 ? `${v.toFixed(0)}%` : '';
           },
           anchor: 'center',
           align: 'center',
-          color: '#fff',
-          font: { size: 15, weight: 'bold' },
+          color,
+          font: { size: 15, weight: 'normal' },
           clamp: true,
         },
       },
@@ -221,5 +265,29 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       data,
       options: mergedOptions,
     });
+
+    // opcional: reage a troca de tema
+    this.observeThemeChanges(() => {
+      const c = this.getThemeTextColor();
+      (this.incomePie!.options.plugins as any).legend.labels.color = c;
+      (this.incomePie!.options.plugins as any).datalabels.color = c;
+      this.incomePie!.update();
+    });
+  }
+
+  private getThemeTextColor(): string {
+    // dark => branco | light => preto
+    return document.documentElement.classList.contains('dark')
+      ? '#fff'
+      : '#000';
+  }
+
+  private observeThemeChanges(onChange: () => void) {
+    const el = document.documentElement;
+
+    const obs = new MutationObserver(() => onChange());
+    obs.observe(el, { attributes: true, attributeFilter: ['class'] });
+
+    return () => obs.disconnect(); // cleanup
   }
 }
