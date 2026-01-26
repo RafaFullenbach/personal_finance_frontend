@@ -49,8 +49,8 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 1.6rem;
+  font-family: "Inter", Roboto, "Helvetica Neue", sans-serif;
 }
 
 * {
@@ -88,7 +88,7 @@ body {
     --pf-muted: #64748b;
     --pf-data-label: #080808;
   }
-  
+
   .mat-mdc-table .mat-mdc-row:nth-child(odd) {
     background-color: var(--pf-surface) !important;
   }

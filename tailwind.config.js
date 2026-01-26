@@ -4,9 +4,13 @@ module.exports = {
   //  corePlugins: {
   //   preflight: false,
   // },
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "Roboto", "Helvetica Neue", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };
