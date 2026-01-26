@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { MatTableModule } from '@angular/material/table';
@@ -28,6 +28,7 @@ import { ToastService } from '../../../../core/ui/toast.service';
     MatSelectModule,
     MatTooltipModule,
     MatSlideToggleModule,
+    RouterLink,
   ],
   providers: [BudgetsStore],
   templateUrl: './budgets-list-page.component.html',
@@ -74,10 +75,6 @@ export class BudgetsListPageComponent implements OnInit {
   applyPeriod() {
     const { year, month } = this.periodForm.getRawValue();
     this.store.setPeriod(year, month);
-  }
-
-  goNew() {
-    this.router.navigate(['/budgets/new']);
   }
 
   goEdit(b: BudgetDto) {

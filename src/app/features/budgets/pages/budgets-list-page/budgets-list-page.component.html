@@ -7,17 +7,33 @@
       </p>
     </div>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="!rounded-lg !py-3 !px-6"
-      (click)="goNew()"
-    >
-      <span class="flex items-center gap-3">
-        <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
-        <span class="text-2xl font-medium leading-none">Novo orçamento</span>
-      </span>
-    </button>
+    <div class="flex gap-10">
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/budgets/vs-actual']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">insert_chart</mat-icon>
+          <span class="text-2xl font-medium leading-none"
+            >Orçado vs Realizado</span
+          >
+        </span>
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="!rounded-lg !py-3 !px-6"
+        [routerLink]="['/budgets/new']"
+      >
+        <span class="flex items-center gap-3">
+          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
+          <span class="text-2xl font-medium leading-none">Novo orçamento</span>
+        </span>
+      </button>
+    </div>
   </div>
 
   <form

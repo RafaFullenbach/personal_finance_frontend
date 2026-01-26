@@ -1,0 +1,39 @@
+input,
+mat-select,
+mat-label,
+mat-form-field {
+  font-size: 1.4rem;
+}
+
+mat-error {
+  font-size: 1.2rem;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  font-size: 1.4rem;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-form-field-label {
+  font-size: 1.4rem;
+}
+
+:host ::ng-deep .pf-full {
+  width: 100%;
+}
+
+:host ::ng-deep .pf-full .mat-mdc-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-mdc-select-panel .mdc-list-item__primary-text {
+  line-height: 1.4;
+}
+
+:host ::ng-deep .mat-mdc-select-panel .mdc-list-item {
+  min-height: 4.4rem;
+  align-items: center;
+}
+
+:host ::ng-deep button.action-cancel {
+  background-color: var(--mat-sys-error) !important;
+}
