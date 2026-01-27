@@ -31,7 +31,7 @@ export function mapHttpError(err: unknown): AppError {
     const msg = body.detail ?? body.title ?? 'Erro';
 
     if (err.status === 400) {
-      return { kind: 'validation', message: msg, code: body.code ?? undefined };
+      return { kind: 'validation', message: msg };
     }
 
     if (err.status === 404) {
@@ -39,7 +39,7 @@ export function mapHttpError(err: unknown): AppError {
     }
 
     if (err.status === 409) {
-      return { kind: 'business', message: msg, code: body.code ?? undefined };
+      return { kind: 'business', message: msg };
     }
 
     return { kind: 'unknown', message: msg };
