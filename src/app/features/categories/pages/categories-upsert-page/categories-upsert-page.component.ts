@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CategoryType } from '../../data-access/categories.api';
 import { CategoriesUpsertStore } from '../../data-access/categories-upsert.store';
 import { MatIconModule } from '@angular/material/icon';
-import { ToastService } from '../../../../core/ui/toast.service';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-categories-upsert-page',

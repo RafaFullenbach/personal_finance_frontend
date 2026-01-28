@@ -17,16 +17,15 @@ import { TransactionType } from '../../data-access/transactions.api';
 import { TransactionsStore } from '../../data-access/transactions.store';
 import { AccountsStore } from '../../../accounts/data-access/accounts.store';
 import { CategoriesStore } from '../../../categories/data-access/categories.store';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ToastService } from '../../../../core/ui/toast.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+
+import { ToastService } from '../../../../core/toast/toast.service';
+import { PfButtonComponent } from '../../../../shared/ui/button/pf-button/pf-button.component';
 
 @Component({
   selector: 'app-transactions-create-page',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink, // ✅ faltava
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -35,6 +34,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    PfButtonComponent,
   ],
   providers: [TransactionsStore, AccountsStore, CategoriesStore],
   templateUrl: './transactions-create-page.component.html',
@@ -161,5 +161,17 @@ export class TransactionsCreatePageComponent {
         this.router.navigate(['/transactions']);
       });
     }
+  }
+
+  goBack() {
+    const returnUrl = history.state?.returnUrl as string | undefined;
+
+    if (returnUrl) {
+      this.router.navigateByUrl(returnUrl);
+      return;
+    }
+
+    // fallback se entrou direto no edit (sem state)
+    this.router.navigate(['/transactions']);
   }
 }

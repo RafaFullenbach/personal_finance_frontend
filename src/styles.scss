@@ -6,14 +6,9 @@
 @tailwind components;
 @tailwind utilities;
 
-// Problema de conflito de bordas entre Tailwind e MDC
-@layer base {
-  *,
-  ::before,
-  ::after {
-    border-style: none;
-  }
-}
+////////////////////////////////
+//////// ***Temas***  /////////
+//////////////////////////////
 
 // Paletas (M2)
 $primary: mat.m2-define-palette(mat.$m2-indigo-palette);
@@ -42,28 +37,25 @@ $dark-theme: mat.m2-define-dark-theme(
   )
 );
 
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-size: 1.6rem;
-  font-family: "Inter", Roboto, "Helvetica Neue", sans-serif;
-}
-
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+///////////////////////////////
+//////// ***Resets***  ////////
+//////////////////////////////
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
-  font-size: 62.5%;
+  font-size: 62.5%; //1rem = 10px;
 
   @include mat.tooltip-overrides(
     (
@@ -97,6 +89,18 @@ body {
     background: rgba(136, 140, 145, 0.06) !important;
   }
 }
+
+body {
+  margin: 0;
+  font-size: 1.6rem; //16px
+  font-family: "Inter", Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
 
 html.dark {
   // Gera apenas CORES (evita duplicar density)
@@ -158,10 +162,6 @@ html.dark {
 
 .pf-text {
   color: var(--pf-text) !important;
-}
-
-.pf-card {
-  background: var(--pf-card) !important;
 }
 
 // Ajuste de padding para não cortar itens ao aumentar a fonte do select

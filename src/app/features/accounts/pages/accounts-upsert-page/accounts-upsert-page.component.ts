@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { AccountType } from '../../data-access/accounts.api';
 import { AccountsUpsertStore } from '../../data-access/accounts-upsert.store';
-import { ToastService } from '../../../../core/ui/toast.service';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-accounts-upsert-page',

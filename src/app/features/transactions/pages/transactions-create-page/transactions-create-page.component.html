@@ -19,7 +19,7 @@
       mat-flat-button
       color="primary"
       class="!rounded-lg !py-3 !px-6"
-      [routerLink]="['/transactions']"
+      (click)="goBack()"
     >
       <span class="flex items-center gap-3">
         <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">arrow_back</mat-icon>
@@ -37,10 +37,7 @@
     </div>
   }
 
-  <form
-    [formGroup]="form"
-    class="rounded-lg border border-slate-200 p-6"
-  >
+  <form [formGroup]="form" class="rounded-lg border border-slate-200 p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <mat-form-field appearance="outline" class="md:col-span-2">
         <mat-label>Descrição</mat-label>
@@ -131,32 +128,24 @@
     </div>
 
     <div class="flex items-center justify-end gap-3 mt-6">
-      <button
-        type="button"
+      <pf-button
         color="warn"
-        mat-flat-button
-        class="!rounded-lg !py-3 !px-6"
-        [routerLink]="['/transactions']"
-      >
-        <span class="flex items-center gap-3">
-          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">block</mat-icon>
-          <span class="text-2xl font-medium leading-none">Cancelar</span>
-        </span>
-      </button>
+        type="button"
+        icon="block"
+        (click)="goBack()"
+        label="Cancelar"
+        size="lg"
+      />
 
-      <button
-        mat-flat-button
-        color="primary"
-        class="!rounded-lg"
+      <pf-button
         type="submit"
+        color="primary"
+        icon="save"
+        label="Salvar"
+        [loading]="store.loading()"
         (click)="submit()"
-        [disabled]="store.loading()"
-      >
-        <span class="flex items-center gap-3">
-          <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">save</mat-icon>
-          <span class="text-2xl font-medium leading-none">Salvar</span>
-        </span>
-      </button>
+        size="lg"
+      />
     </div>
   </form>
 </div>

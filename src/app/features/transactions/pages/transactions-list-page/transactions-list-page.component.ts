@@ -143,10 +143,11 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ToastService } from '../../../../core/ui/toast.service';
+
 import { MatInputModule } from '@angular/material/input';
 
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-transactions-list-page',
@@ -223,35 +224,84 @@ export class TransactionsListPageComponent implements OnInit {
     'status',
     'actions',
   ];
-  
+
   ngOnInit(): void {
+    // this.store.load();
+
+    // // ✅ quando muda qualquer select → request imediato
+    // this.filtersForm.controls.year.valueChanges
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe(() => this.applyFilters());
+
+    // this.filtersForm.controls.month.valueChanges
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe(() => this.applyFilters());
+
+    // this.filtersForm.controls.type.valueChanges
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe(() => this.applyFilters());
+
+    // this.filtersForm.controls.status.valueChanges
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe(() => this.applyFilters());
+
+    // // ✅ quando digita descrição → espera parar de digitar e faz request
+    // this.filtersForm.controls.description.valueChanges
+    //   .pipe(
+    //     debounceTime(400),
+    //     distinctUntilChanged(),
+    //     takeUntilDestroyed(this.destroyRef),
+    //   )
+    //   .subscribe(() => this.applyFilters());
+
+    this.filtersForm.patchValue(
+      {
+        year: this.store.filterYear(),
+        month: this.store.filterMonth(),
+        type: this.store.filterType(),
+        status: this.store.filterStatus(),
+        description: this.store.filterDescription(), // <-- aqui está o texto
+      },
+      { emitEvent: false },
+    );
+
+    // 2) carrega a lista já com filtros restaurados
     this.store.load();
 
-    // ✅ quando muda qualquer select → request imediato
+    // 3) agora sim assina changes
+    this.setupFilterSubscriptions();
+  }
+
+  private setupFilterSubscriptions() {
     this.filtersForm.controls.year.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.applyFilters());
+      .subscribe(() => this.applyFilters({ updateUrl: true }));
 
     this.filtersForm.controls.month.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.applyFilters());
+      .subscribe(() => this.applyFilters({ updateUrl: true }));
 
     this.filtersForm.controls.type.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.applyFilters());
+      .subscribe(() => this.applyFilters({ updateUrl: true }));
 
     this.filtersForm.controls.status.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.applyFilters());
+      .subscribe(() => this.applyFilters({ updateUrl: true }));
 
-    // ✅ quando digita descrição → espera parar de digitar e faz request
     this.filtersForm.controls.description.valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.applyFilters());
+      .subscribe(() => this.applyFilters({ updateUrl: true }));
+  }
+
+  goEdit(id: string) {
+    this.router.navigate(['/transactions', id, 'edit'], {
+      state: { returnUrl: this.router.url }, // <-- aqui vai a url com query params
+    });
   }
 
   onPage(e: PageEvent) {

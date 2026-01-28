@@ -1,9 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
-import { ToastService } from '../ui/toast.service';
 import { mapHttpError } from '../error/error-mapper';
 import { AppError } from '../error/app-error';
+import { ToastService } from '../toast/toast.service';
 
 function isAppError(e: any): e is AppError {
   return e && typeof e === 'object' && typeof e.kind === 'string' && typeof e.message === 'string';

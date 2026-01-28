@@ -180,7 +180,7 @@
 
                 <button
                   mat-icon-button
-                  [routerLink]="['/transactions', t.id, 'edit']"
+                  (click)="goEdit(t.id)"
                   [disabled]="t.status !== 'Pending' || store.vm().loading"
                   matTooltip="Editar"
                 >

@@ -1,4 +1,11 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  untracked,
+} from '@angular/core';
 import {
   CreateTransactionRequest,
   TransactionsApi,
@@ -12,6 +19,19 @@ import {
   TransactionListItemDto,
   UpdateTransactionRequest,
 } from './transactions.api';
+
+type TransactionsListState = {
+  year: number | null;
+  month: number | null;
+  type: TransactionType | null;
+  status: TransactionStatus | null;
+  description: string;
+  pageSize: number;
+  sortBy: string;
+  order: 'asc' | 'desc';
+};
+
+const STORAGE_KEY = 'pf.v1.transactions.listState';
 
 @Injectable()
 export class TransactionsStore {
@@ -45,6 +65,57 @@ export class TransactionsStore {
     loading: this.loading(),
     error: this.error(),
   }));
+
+  constructor() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try {
+        const s = JSON.parse(raw) as Partial<TransactionsListState>;
+
+        this.filterYear.set(s.year ?? null);
+        this.filterMonth.set(s.month ?? null);
+        this.filterType.set((s.type ?? null) as any);
+        this.filterStatus.set((s.status ?? null) as any);
+        this.filterDescription.set((s.description ?? '').trim());
+
+        if (typeof s.pageSize === 'number' && s.pageSize > 0) {
+          this.pageSize.set(s.pageSize);
+        }
+
+        this.sortBy.set(s.sortBy ?? 'transactionDate');
+        this.order.set(s.order ?? 'desc');
+      } catch {
+        // ignore
+      }
+    }
+
+    // 2) persist (com debounce simples)
+    let t: any;
+
+    effect(() => {
+      const state: TransactionsListState = {
+        year: this.filterYear(),
+        month: this.filterMonth(),
+        type: this.filterType(),
+        status: this.filterStatus(),
+        description: this.filterDescription(),
+        pageSize: this.pageSize(),
+        sortBy: this.sortBy(),
+        order: this.order(),
+      };
+
+      clearTimeout(t);
+      t = setTimeout(() => {
+        untracked(() => {
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          } catch {
+            // ignore
+          }
+        });
+      }, 250);
+    });
+  }
 
   load() {
     this.loading.set(true);
@@ -133,6 +204,9 @@ export class TransactionsStore {
     this.filterDescription.set('');
     this.filterStatus.set(null);
     this.page.set(1);
+ 
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+
     this.load();
   }
 

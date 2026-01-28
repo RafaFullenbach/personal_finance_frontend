@@ -13,7 +13,7 @@ import { BudgetsStore } from '../../data-access/budgets.store';
 import { BudgetDto } from '../../data-access/budgets.api';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ToastService } from '../../../../core/ui/toast.service';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-budgets-list-page',

@@ -14,7 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TransfersCreateStore } from '../../data-access/transfers-create.store';
 
 import { AccountsStore } from '../../../accounts/data-access/accounts.store';
-import { ToastService } from '../../../../core/ui/toast.service';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-transfers-create-page',

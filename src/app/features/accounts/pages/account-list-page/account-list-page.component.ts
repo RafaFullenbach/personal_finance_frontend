@@ -5,9 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { AccountsStore } from '../../data-access/accounts.store';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ToastService } from '../../../../core/ui/toast.service';
 import { RouterLink } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-account-list-page',
