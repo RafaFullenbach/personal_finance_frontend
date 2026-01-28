@@ -62,6 +62,7 @@
       <button
         mat-flat-button
         color="warn"
+        type="button"
         class="!rounded-lg !py-3 !px-6"
         [routerLink]="['/categories']"
       >
@@ -75,7 +76,7 @@
         mat-flat-button
         color="primary"
         class="!rounded-lg"
-        type="button"
+        type="submit"
         (click)="submit()"
         [disabled]="store.loading()"
       >

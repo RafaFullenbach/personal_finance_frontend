@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { API_BASE_URL } from './core/http/api-base-url.token';
-import { environment } from '../environments/environment';
+
 import { errorInterceptor } from './core/http/http-error.interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { baseUrlInterceptor } from './core/http/http-base-url.interceptor';
@@ -18,6 +18,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { toastInterceptor } from './core/http/toast.interceptor';
 import { ArcElement, BarController, BarElement, CategoryScale, Chart, DoughnutController, Legend, LinearScale, registerables, Tooltip } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { environment } from '../environments/environment';
 
 registerLocaleData(localePt);
 Chart.register(

@@ -132,6 +132,7 @@
 
     <div class="flex items-center justify-end gap-3 mt-6">
       <button
+        type="button"
         color="warn"
         mat-flat-button
         class="!rounded-lg !py-3 !px-6"
@@ -147,7 +148,7 @@
         mat-flat-button
         color="primary"
         class="!rounded-lg"
-        type="button"
+        type="submit"
         (click)="submit()"
         [disabled]="store.loading()"
       >

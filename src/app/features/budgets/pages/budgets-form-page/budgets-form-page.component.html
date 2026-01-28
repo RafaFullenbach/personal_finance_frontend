@@ -92,6 +92,7 @@
     <div class="flex items-center justify-end gap-3 mt-6">
       <button
         mat-flat-button
+        type="button"
         color="warn"
         class="!rounded-lg !py-3 !px-6"
         [routerLink]="['/budgets']"
@@ -106,7 +107,7 @@
         mat-flat-button
         color="primary"
         class="!rounded-lg"
-        type="button"
+        type="submit"
         (click)="submit()"
         [disabled]="store.loading()"
       >
