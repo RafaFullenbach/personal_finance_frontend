@@ -37,10 +37,10 @@ Este repositório contém a aplicação **Angular 19**, utilizando **Angular Mat
 
 1. Instale as dependências:
 
-   ```bash
-   npm ci
+```bash
+  npm ci
 
-   ```
+```
 
 2. Suba o servidor de desenvolvimento:
 
