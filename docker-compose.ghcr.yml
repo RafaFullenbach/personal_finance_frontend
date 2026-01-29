@@ -1,0 +1,6 @@
+services:
+  frontend:
+    image: ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+    ports:
+      - "4200:80"
+    restart: unless-stopped
