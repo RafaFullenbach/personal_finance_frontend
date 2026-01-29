@@ -1,59 +1,211 @@
-# PersonalFinanceFrontend
+# Personal Finance — Frontend (Angular) — v1.0.0
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
+Frontend do projeto **Personal Finance**, um sistema de controle financeiro pessoal/família.
 
-## Development server
+Este repositório contém a aplicação **Angular 19**, utilizando **Angular Material** e **TailwindCSS**, com build de produção servido via **Nginx** usando **Docker multi-stage**.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🧠 Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular **19**
+- Angular Material
+- TailwindCSS
+- Docker (multi-stage build)
+- Nginx (SPA fallback para rotas Angular)
+- CI/CD com GitHub Actions publicando imagem no **GHCR**
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📦 Requisitos
 
-```bash
-ng generate component component-name
-```
+### Rodar sem Docker (modo desenvolvimento)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Node.js **20+**
+- npm **9+**
 
-```bash
-ng generate --help
-```
+### Rodar com Docker
 
-## Building
+- Docker Desktop (Windows/Mac) ou Docker Engine (Linux)
+- Docker Compose
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## 🚀 Rodar em modo desenvolvimento (local)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+> Ideal para desenvolvimento do dia a dia (hot reload, debug, etc).
 
-## Running unit tests
+1. Instale as dependências:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+   ```bash
+   npm ci
 
-```bash
-ng test
-```
+   ```
 
-## Running end-to-end tests
+2. Suba o servidor de desenvolvimento:
 
-For end-to-end (e2e) testing, run:
+npm start
 
-```bash
-ng e2e
-```
+3. Acesse no navegador:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+http://localhost:4200
 
-## Additional Resources
+4. Para parar o servidor:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+CTRL + C
+
+🐳 Rodar com Docker (build local)
+
+Use este modo quando você clonou o projeto e quer buildar localmente via Docker.
+
+1. Buildar e subir o container (na raiz do repositório):
+
+docker compose up -d --build
+
+2. Acessar a aplicação:
+
+http://localhost:4200
+
+3. Ver logs do container:
+
+docker compose logs -f
+
+4. Parar o container:
+
+docker compose down
+
+5. Rebuild forçado (sem cache), se necessário:
+
+docker compose build --no-cache
+docker compose up -d
+
+🚀 Rodar no modo profissional (imagem pronta do GHCR)
+
+Use este modo quando você quer rodar a aplicação SEM precisar buildar nada localmente.
+O GitHub Actions já builda e publica a imagem no GHCR automaticamente após push na branch principal.
+
+1. Faça login no GHCR (necessário se o repositório for privado):
+
+Crie um Personal Access Token (PAT) no GitHub com permissão: read:packages
+
+Depois faça login:
+
+docker login ghcr.io -u rafafullenbach
+
+Quando pedir senha, cole o seu PAT.
+
+2. Baixe a imagem publicada:
+
+docker pull ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+
+3. Rode o container usando a imagem pronta:
+
+docker run -d \
+ --name pf-web \
+ -p 4200:80 \
+ ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+
+4.  Acesse a aplicação:
+
+http://localhost:4200
+
+5. Ver logs do container:
+
+docker logs -f pf-web
+
+6. Parar e remover o container:
+
+docker rm -f pf-web
+
+🧪 Testes
+
+1. Rodar testes:
+
+npm test
+
+2. Rodar testes com coverage:
+
+ng test --code-coverage
+
+O relatório HTML é gerado em:
+
+coverage/<nome-do-projeto>/index.html
+
+🏗️ Build de produção (sem Docker)
+
+1. Gerar build de produção:
+
+npm run build -- --configuration production
+
+🧱 Estrutura do projeto (alto nível)
+
+- src/ → código fonte Angular
+
+- nginx.conf → configuração do Nginx com fallback SPA (rotas Angular)
+
+- Dockerfile → build multi-stage (Node build + Nginx runtime)
+
+- docker-compose.yml → execução local com Docker
+
+⚙️ Como funciona o Dockerfile (resumo)
+
+O build é feito em 2 estágios:
+
+1. Build (Node)
+
+- instala dependências com npm ci
+
+- gera build de produção com npm run build -- --configuration production
+
+2. Run (Nginx)
+
+- usa nginx:alpine
+
+- copia os arquivos buildados para /usr/share/nginx/html
+
+- aplica fallback SPA via nginx.conf
+
+🛠 Troubleshooting
+
+Docker error: dockerDesktopLinuxEngine pipe not found
+
+Normalmente significa que o Docker Desktop não está rodando.
+
+Solução:
+
+1. Abra o Docker Desktop
+
+2. Aguarde ficar “Running”
+
+3. Rode novamente o comando Docker
+
+Erro ao puxar imagem do GHCR (pull access denied)
+
+- Isso acontece quando:
+
+- você não fez login no GHCR
+
+- o token não tem permissão suficiente
+
+- o repositório é privado
+
+Solução:
+
+1. Faça login:
+
+- docker login ghcr.io -u rafafullenbach
+
+Porta 4200 já está em uso
+
+- Se a porta já estiver ocupada, rode com outra porta, por exemplo:
+
+- docker run -d --name pf-web -p 4300:80 ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+
+Acesse:
+
+- http://localhost:4300
+
+📌 Versão
+
+- v1.0.0
+
