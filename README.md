@@ -44,7 +44,10 @@ Este repositório contém a aplicação **Angular 19**, utilizando **Angular Mat
 
 2. Suba o servidor de desenvolvimento:
 
+```bash
 npm start
+
+```
 
 3. Acesse no navegador:
 
@@ -60,6 +63,7 @@ Use este modo quando você clonou o projeto e quer buildar localmente via Docker
 
 1. Buildar e subir o container (na raiz do repositório):
 
+
 docker compose up -d --build
 
 2. Acessar a aplicação:
@@ -68,16 +72,22 @@ http://localhost:4200
 
 3. Ver logs do container:
 
+```bash
 docker compose logs -f
+```
 
 4. Parar o container:
 
+```bash
 docker compose down
+```
 
 5. Rebuild forçado (sem cache), se necessário:
 
+```bash
 docker compose build --no-cache
 docker compose up -d
+```
 
 🚀 Rodar no modo profissional (imagem pronta do GHCR)
 
@@ -90,20 +100,26 @@ Crie um Personal Access Token (PAT) no GitHub com permissão: read:packages
 
 Depois faça login:
 
+```bash
 docker login ghcr.io -u rafafullenbach
+```
 
 Quando pedir senha, cole o seu PAT.
 
 2. Baixe a imagem publicada:
 
+```bash
 docker pull ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+```
 
 3. Rode o container usando a imagem pronta:
 
+```bash
 docker run -d \
  --name pf-web \
  -p 4200:80 \
  ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+ ```
 
 4.  Acesse a aplicação:
 
@@ -111,21 +127,29 @@ http://localhost:4200
 
 5. Ver logs do container:
 
+```bash
 docker logs -f pf-web
+ ```
 
 6. Parar e remover o container:
 
+```bash
 docker rm -f pf-web
+ ```
 
 🧪 Testes
 
 1. Rodar testes:
 
+```bash
 npm test
+ ```
 
 2. Rodar testes com coverage:
 
+```bash
 ng test --code-coverage
+ ```
 
 O relatório HTML é gerado em:
 
@@ -135,7 +159,9 @@ coverage/<nome-do-projeto>/index.html
 
 1. Gerar build de produção:
 
+```bash
 npm run build -- --configuration production
+ ```
 
 🧱 Estrutura do projeto (alto nível)
 
@@ -193,13 +219,17 @@ Solução:
 
 1. Faça login:
 
+```bash
 - docker login ghcr.io -u rafafullenbach
+```
 
 Porta 4200 já está em uso
 
 - Se a porta já estiver ocupada, rode com outra porta, por exemplo:
 
+```bash
 - docker run -d --name pf-web -p 4300:80 ghcr.io/rafafullenbach/personal_finance_frontend/frontend:latest
+```
 
 Acesse:
 
@@ -208,4 +238,3 @@ Acesse:
 📌 Versão
 
 - v1.0.0
-
