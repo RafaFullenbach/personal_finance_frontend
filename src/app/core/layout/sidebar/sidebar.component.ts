@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../../../environments/environment';
 
 type NavItem = { label: string; icon: string; path: string };
 
@@ -21,6 +22,8 @@ type NavItem = { label: string; icon: string; path: string };
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
+  version = environment.version;
+
   nav: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
     { label: 'Lançamentos', icon: 'receipt_long', path: '/transactions' },

@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { RecurringStore } from '../../data-access/recurring.store';
 import { MatIconModule } from '@angular/material/icon';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-recurring-generate-page',
@@ -30,6 +31,8 @@ export class RecurringGeneratePageComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   store = inject(RecurringStore);
+
+  toast = inject(ToastService);
 
   years = Array.from({ length: 8 }, (_, i) => new Date().getFullYear() - 5 + i);
   months = [
@@ -58,6 +61,9 @@ export class RecurringGeneratePageComponent implements OnInit {
     const y = this.form.controls.year.value;
     const m = this.form.controls.month.value;
 
-    this.store.generate(y, m, () => this.router.navigate(['/recurring']));
+    this.store.generate(y, m, () => {
+      this.toast.success("Recorrências geradas com sucesso!")
+      this.router.navigate(['/recurring'])
+    });
   }
 }
