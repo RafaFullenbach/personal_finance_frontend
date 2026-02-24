@@ -14,9 +14,7 @@
       >
         <span class="flex items-center gap-3">
           <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">start</mat-icon>
-          <span class="text-2xl font-medium leading-none"
-            >Gerar recorrências</span
-          >
+          <span class="text-2xl font-medium leading-none">Gerar recorrências</span>
         </span>
       </button>
 
@@ -28,9 +26,7 @@
       >
         <span class="flex items-center gap-3">
           <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">add</mat-icon>
-          <span class="text-2xl font-medium leading-none"
-            >Nova recorrência</span
-          >
+          <span class="text-2xl font-medium leading-none">Nova recorrência</span>
         </span>
       </button>
     </div>
@@ -51,7 +47,7 @@
     <div class="mt-6">Carregando...</div>
   } @else {
     <div
-      class="rounded-lg border border-slate-200  overflow-hidden flex-1 min-h-0 mt-2"
+      class="rounded-lg border border-slate-200 overflow-hidden flex-1 min-h-0 mt-2"
     >
       <div class="overflow-auto">
         <table mat-table [dataSource]="store.vm().items" class="w-full table-lg">
@@ -93,6 +89,36 @@
             <th mat-header-cell *matHeaderCellDef>Fim</th>
             <td mat-cell *matCellDef="let r">
               {{ r.endDate ? (r.endDate | date: "dd/MM/yyyy") : "-" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let r">
+              {{ r.isActive ? "Ativa" : "Inativa" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="activate">
+            <th mat-header-cell *matHeaderCellDef>Ativar/Desativar</th>
+            <td mat-cell *matCellDef="let r">
+              <mat-slide-toggle
+                [checked]="r.isActive"
+                (change)="r.isActive ? deactivate(r.id) : activate(r.id)"
+              ></mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef class="w-[100px]">Editar</th>
+            <td mat-cell *matCellDef="let r">
+              <button
+                mat-icon-button
+                [routerLink]="['/recurring', r.id, 'edit']"
+                matTooltip="Editar"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
             </td>
           </ng-container>
 

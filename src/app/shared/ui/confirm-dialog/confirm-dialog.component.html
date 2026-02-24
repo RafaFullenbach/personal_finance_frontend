@@ -1,0 +1,31 @@
+<h1
+  mat-dialog-title
+  class="!text-3xl !font-bold !leading-tight !mb-3"
+>
+  {{ data.title }}
+</h1>
+
+<mat-dialog-content>
+  <p class="text-xl">{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="flex gap-3">
+  <pf-button
+    variant="basic"
+    [color]="undefined"
+    type="button"
+    icon="close"
+    (click)="cancel()"
+    [label]="data.cancelText ?? 'Cancelar'"
+    size="lg"
+  />
+
+  <pf-button
+    type="button"
+    color="warn"
+    icon="delete"
+    [label]="data.confirmText ?? 'Excluir'"
+    (click)="confirm()"
+    size="lg"
+  />
+</mat-dialog-actions>

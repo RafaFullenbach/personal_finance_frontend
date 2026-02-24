@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -11,11 +11,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { RecurringStore } from '../../data-access/recurring.store';
-import { TransactionType } from '../../../transactions/data-access/transactions.api'; // ajuste se estiver em outro lugar
+import { TransactionType } from '../../../transactions/data-access/transactions.api';
 
-import { AccountsStore } from '../../../accounts/data-access/accounts.store'; // ajuste path
+import { AccountsStore } from '../../../accounts/data-access/accounts.store';
 import { CategoriesStore } from '../../../categories/data-access/categories.store';
 import { MatIconModule } from '@angular/material/icon';
+import { ToastService } from '../../../../core/toast/toast.service';
 
 @Component({
   selector: 'app-recurring-form-page',
@@ -39,10 +40,15 @@ import { MatIconModule } from '@angular/material/icon';
 export class RecurringFormPageComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private toast = inject(ToastService);
 
   store = inject(RecurringStore);
   accountsStore = inject(AccountsStore);
   categoriesStore = inject(CategoriesStore);
+
+  recurringId = this.route.snapshot.paramMap.get('id');
+  isEditMode = signal(!!this.recurringId);
 
   types: { value: TransactionType; label: string }[] = [
     { value: 'Debit', label: 'Despesa' },
@@ -60,7 +66,7 @@ export class RecurringFormPageComponent implements OnInit {
     ]),
     type: this.fb.control<TransactionType | null>(null, [Validators.required]),
     accountId: this.fb.control<string | null>(null, [Validators.required]),
-    categoryId: this.fb.control<string | null>(null, [Validators.required]),
+    categoryId: this.fb.control<string | null>(null),
     dayOfMonth: this.fb.control<number | null>(null, [
       Validators.required,
       Validators.min(1),
@@ -74,6 +80,24 @@ export class RecurringFormPageComponent implements OnInit {
   ngOnInit(): void {
     this.accountsStore.load();
     this.categoriesStore.load();
+
+    if (!this.recurringId) {
+      return;
+    }
+
+    this.store.loadById(this.recurringId, (item) => {
+      this.form.patchValue({
+        description: item.description,
+        amount: item.amount,
+        type: item.type,
+        accountId: item.accountId,
+        categoryId: item.categoryId ?? null,
+        dayOfMonth: item.dayOfMonth,
+        competenceOffsetMonths: item.competenceOffsetMonths,
+        startDate: item.startDate ? new Date(item.startDate) : null,
+        endDate: item.endDate ? new Date(item.endDate) : null,
+      });
+    });
   }
 
   submit() {
@@ -83,20 +107,29 @@ export class RecurringFormPageComponent implements OnInit {
     }
 
     const v = this.form.getRawValue();
+    const payload = {
+      description: v.description!,
+      amount: v.amount!,
+      type: v.type!,
+      accountId: v.accountId!,
+      categoryId: v.categoryId ?? null,
+      dayOfMonth: v.dayOfMonth!,
+      competenceOffsetMonths: v.competenceOffsetMonths!,
+      startDate: (v.startDate as Date).toISOString(),
+      endDate: v.endDate ? v.endDate.toISOString() : null,
+    };
 
-    this.store.create(
-      {
-        description: v.description!,
-        amount: v.amount!,
-        type: v.type!,
-        accountId: v.accountId!,
-        categoryId: v.categoryId ?? null,
-        dayOfMonth: v.dayOfMonth!,
-        competenceOffsetMonths: v.competenceOffsetMonths!,
-        startDate: (v.startDate as Date).toISOString(),
-        endDate: v.endDate ? v.endDate.toISOString() : null,
-      },
-      () => this.router.navigate(['/recurring']),
-    );
+    if (this.recurringId) {
+      this.store.update(this.recurringId, payload, () => {
+        this.toast.success('Recorrência atualizada com sucesso.');
+        this.router.navigate(['/recurring']);
+      });
+      return;
+    }
+
+    this.store.create(payload, () => {
+      this.toast.success('Recorrência criada com sucesso.');
+      this.router.navigate(['/recurring']);
+    });
   }
 }

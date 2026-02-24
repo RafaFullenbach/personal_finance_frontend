@@ -6,5 +6,6 @@ import { RecurringGeneratePageComponent } from './pages/recurring-generate-page/
 export const recurringRoutes: Routes = [
   { path: '', component: RecurringListPageComponent },
   { path: 'new', component: RecurringFormPageComponent },
+  { path: ':id/edit', component: RecurringFormPageComponent },
   { path: 'generate', component: RecurringGeneratePageComponent },
 ];

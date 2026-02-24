@@ -7,6 +7,7 @@ export type TransactionType = 'Debit' | 'Credit';
 
 export interface RecurringTemplateListItemDto {
   id: Guid;
+  isActive: boolean;
   amount: number;
   type: TransactionType;
   accountId: Guid;
@@ -30,18 +31,41 @@ export interface CreateRecurringTemplateRequest {
   endDate?: string | null; // ISO | null
 }
 
+export type UpdateRecurringTemplateRequest = CreateRecurringTemplateRequest;
+
 @Injectable({ providedIn: 'root' })
 export class RecurringApi {
   private http = inject(HttpClient);
 
-  getAll() {
+  getAll(includeInactive: boolean = true) {
+    const params = new HttpParams().set(
+      'includeInactive',
+      String(includeInactive),
+    );
     return this.http.get<RecurringTemplateListItemDto[]>(
       '/recurring/templates',
+      { params },
     );
+  }
+
+  getById(id: Guid) {
+    return this.http.get<RecurringTemplateListItemDto>(`/recurring/templates/${id}`);
   }
 
   create(req: CreateRecurringTemplateRequest) {
     return this.http.post<void>('/recurring/templates', req);
+  }
+
+  update(id: Guid, req: UpdateRecurringTemplateRequest) {
+    return this.http.put<void>(`/recurring/templates/${id}`, req);
+  }
+
+  activate(id: Guid) {
+    return this.http.post<void>(`/recurring/templates/${id}/activate`, {});
+  }
+
+  deactivate(id: Guid) {
+    return this.http.post<void>(`/recurring/templates/${id}/deactivate`, {});
   }
 
   generate(year: number, month: number) {

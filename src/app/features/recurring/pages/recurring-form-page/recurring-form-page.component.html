@@ -1,8 +1,16 @@
 <div class="h-full flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-4xl font-semibold mb-1">Nova recorrência</h1>
-      <p class="text-slate-500 text-2xl">Crie um template recorrente.</p>
+      <h1 class="text-4xl font-semibold mb-1">
+        {{ isEditMode() ? "Editar recorrência" : "Nova recorrência" }}
+      </h1>
+      <p class="text-slate-500 text-2xl">
+        {{
+          isEditMode()
+            ? "Atualize os dados do template recorrente."
+            : "Crie um template recorrente."
+        }}
+      </p>
     </div>
 
     <button
@@ -117,11 +125,6 @@
               <mat-option [value]="c.id">{{ c.name }}</mat-option>
             }
           </mat-select>
-          @if (
-            form.controls.categoryId.touched && form.controls.categoryId.invalid
-          ) {
-            <mat-error>Categoria é obrigatória</mat-error>
-          }
         </mat-form-field>
       </div>
     </div>
@@ -150,7 +153,9 @@
       >
         <span class="flex items-center gap-3">
           <mat-icon class="!text-[2rem] !w-[2rem] !h-[2rem]">save</mat-icon>
-          <span class="text-2xl font-medium leading-none">Salvar</span>
+          <span class="text-2xl font-medium leading-none">
+            {{ isEditMode() ? "Atualizar" : "Salvar" }}
+          </span>
         </span>
       </button>
     </div>

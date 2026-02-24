@@ -3,6 +3,7 @@ import {
   RecurringApi,
   CreateRecurringTemplateRequest,
   RecurringTemplateListItemDto,
+  UpdateRecurringTemplateRequest,
 } from './recurring.api';
 import { AppError } from '../../../core/error/app-error';
 
@@ -45,6 +46,68 @@ export class RecurringStore {
         this.loading.set(false);
         onSuccess();
       },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  loadById(id: string, onSuccess: (item: RecurringTemplateListItemDto) => void) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.getById(id).subscribe({
+      next: (res) => {
+        this.loading.set(false);
+        onSuccess(res);
+      },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  update(
+    id: string,
+    req: UpdateRecurringTemplateRequest,
+    onSuccess: () => void,
+  ) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.update(id, req).subscribe({
+      next: () => {
+        this.loading.set(false);
+        onSuccess();
+      },
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  activate(id: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.activate(id).subscribe({
+      next: () => this.load(),
+      error: (e) => {
+        this.error.set(e);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  deactivate(id: string) {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api.deactivate(id).subscribe({
+      next: () => this.load(),
       error: (e) => {
         this.error.set(e);
         this.loading.set(false);
